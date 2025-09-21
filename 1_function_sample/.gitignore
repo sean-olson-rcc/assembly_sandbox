@@ -1,0 +1,57 @@
+# Assembly build artifacts
+*.o
+*.obj
+*.elf
+*.exe
+*.bin
+*.out
+
+# Platform-specific executables (no extension)
+main
+function
+calculator
+graphics
+
+# Debug files
+*.dSYM/
+*.pdb
+*.ilk
+
+# Linker files
+*.map
+*.lst
+
+# Assembler temporary files
+*.tmp
+*.temp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# GDB files
+.gdb_history
+gdb.txt
+
+# Core dumps
+core
+core.*
+*.core
+
+# Backup files
+*.bak
+*.backup
+*~
