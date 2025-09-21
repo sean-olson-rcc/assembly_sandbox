@@ -49,7 +49,7 @@ YASM_FLAGS := -f $(YASM_FORMAT) -Werror -g $(DEBUG_FORMAT)
 
 # Define the base name for source file and executable (can be overridden)
 # Usage: make PROGRAM=myprogram build
-PROGRAM ?= function
+PROGRAM ?= linux_function
 
 # Define the name of our final executable program (with platform suffix)
 BIN_NAME := $(PROGRAM)$(BIN_SUFFIX)
