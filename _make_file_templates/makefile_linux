@@ -1,40 +1,43 @@
 define say
-	$(info [Compute Circle Area] $1)
+	$(info [Linux Makefile Template] $1)
 endef
 
-#
-CC := gcc
-ASM := yasm
-C_FLAGS := -c -Wall -gdwarf-2 -m64 -no-pie
-YASM_FLAGS := -f elf64 -g dwarf2 -Werror
-LINK_FLAGS := -Wall -gdwarf-2 -m64 -Werror -no-pie -z noexecstack
 
 #
 REPO_PATH := $(abspath .)
 $(call say,REPO_PATH: $(REPO_PATH))
 
+
+#
+YASM_FLAGS := -f elf64 -g dwarf2
+LINK_FLAGS := -g
+
+
 #
 BIN_NAME := main
 BIN := ./$(BIN_NAME)
-$(call say,Binary path: $(BIN))
+
+
+
 
 #
 default:	help
 .PHONY: default
 
-#
+
 help:
-	@echo "***** Compute the Area of a Circle *****"
+	@echo "***** Makefile Menu *****"
 	@echo
-	@echo "make help         ==> This help menu"
+	@echo "make help          ==> This menu"
 	@echo
-	@echo "make build        ==> Rebuild your project"
-	@echo "make run          ==> Run your project"
-	@echo "make debug        ==> Debug your project"
+	@echo "make build         ==> Build the program"
+	@echo "make run           ==> Run the program"
+	@echo "make debug         ==> Debug the program"
 	@echo
-	@echo "make clean        ==> Clean temporary build files"
+	@echo "make clean         ==> Clean the build area"
 	@echo
 .PHONY: help
+
 
 
 #
@@ -43,7 +46,7 @@ build:	$(BIN)
 
 
 #
-run:	build
+run:	$(BIN)
 	$(BIN)
 .PHONY: run
 
@@ -55,23 +58,19 @@ debug:	build
 
 #
 clean:
-	-rm *.o
-	-rm $(BIN)
+	-rm -f *.o
+	-rm -f $(BIN)
 .PHONY: clean
 
-#
-$(BIN):	main.o area.o
-	$(CC) $(LINK_FLAGS) *.o *.so -o $(BIN)
 
 #
-main.o:	main.c
-	$(CC) $(C_FLAGS) $< -o "$@"
+$(BIN):	main.o
+	ld $(LINK_FLAGS) main.o -o $(BIN)
 
 
 #
-area.o:	area.asm
-	$(ASM) $(YASM_FLAGS) $< -o "$@"
-
+main.o:	main.asm
+	yasm $(YASM_FLAGS) main.asm -o main.o
 
 
 
