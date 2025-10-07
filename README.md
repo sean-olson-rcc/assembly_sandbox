@@ -7,6 +7,7 @@ A collection of x86-64 assembly language programs designed as a learning environ
 | Directory/File | Description |
 |---------------|-------------|
 | [`1_function_sample/`](./1_function_sample/) | Basic "Hello World" program demonstrating functions and Linux system calls |
+| [`_makefile_templates/`](./_makefile_templates/) | Platform-specific Makefile templates and build automation scripts |
 | [`notes/`](./notes/) | Reference documentation and assembly programming guides |
 | [`notes/register_usage.md`](./notes/register_usage.md) | Comprehensive x86-64 register reference and calling conventions |
 | [`Makefile`](./Makefile) | Cross-platform build system with configurable targets |
