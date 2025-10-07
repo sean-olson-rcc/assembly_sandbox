@@ -8,6 +8,9 @@
 
 # Platform-specific executables (no extension)
 main
+main_l
+main_m
+main_w
 function
 calculator
 graphics
@@ -31,7 +34,7 @@ graphics
 *.swp
 *.swo
 *~
-# settings.json
+settings.json
 
 # OS generated files
 .DS_Store
