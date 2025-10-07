@@ -5,12 +5,12 @@
 *.exe
 *.bin
 *.out
+*.list
 
 # Platform-specific executables (no extension)
-
 *_l
 *_m
-*_w
+*_w.exe
 main
 function
 calculator

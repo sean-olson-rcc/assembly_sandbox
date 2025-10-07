@@ -7,7 +7,7 @@ REPO_PATH := $(abspath .)
 $(call say,REPO_PATH: $(REPO_PATH))
 
 #
-YASM_FLAGS := -f macho64
+YASM_FLAGS :=  -g -F dwarf -f macho64
 LINK_FLAGS := -g
 
 #
@@ -49,6 +49,7 @@ debug:	build
 #
 clean:
 	-rm -f *.o
+	-rm -f *.list
 	-rm -f $(BIN)
 .PHONY: clean
 
@@ -58,7 +59,7 @@ $(BIN):	main_m.o
 
 #
 main_m.o:	main_m.asm
-	yasm $(YASM_FLAGS) main_m.asm -o main_m.o
+	nasm $(YASM_FLAGS) main_m.asm -o main_m.o
 
 
 
