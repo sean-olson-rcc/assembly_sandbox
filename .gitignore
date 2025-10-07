@@ -7,10 +7,11 @@
 *.out
 
 # Platform-specific executables (no extension)
+
+*_l
+*_m
+*_w
 main
-main_l
-main_m
-main_w
 function
 calculator
 graphics
