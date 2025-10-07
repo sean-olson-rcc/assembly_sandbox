@@ -7,7 +7,7 @@ REPO_PATH := $(abspath .)
 $(call say,REPO_PATH: $(REPO_PATH))
 
 #
-YASM_FLAGS :=  -g -F dwarf -f macho64
+NASM_FLAGS :=  -g -F dwarf -f macho64
 LINK_FLAGS := -g
 
 #
@@ -59,7 +59,7 @@ $(BIN):	main_m.o
 
 #
 main_m.o:	main_m.asm
-	nasm $(YASM_FLAGS) main_m.asm -o main_m.o
+	nasm $(NASM_FLAGS) main_m.asm -o main_m.o
 
 
 
