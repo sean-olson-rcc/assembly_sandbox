@@ -38,8 +38,8 @@ section					.bss
 ; 	average of integers (also via reference)
 
 
-global _start
-_start:
+global stats
+stats:
 
 	;prologue
 	push 	r12
@@ -56,7 +56,7 @@ sumLoop:
 	cmp			r11,	rsi
 	jb			sumLoop
 
-	mov			dword [rdx]	r12d				; return sum 
+	mov			dword [rdx],	r12d				; return sum 
 
 	;epilogue
 	pop 		r12	
