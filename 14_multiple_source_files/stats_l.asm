@@ -40,7 +40,6 @@ section					.bss
 
 global stats
 stats:
-
 	;prologue
 	push 	r12
 
