@@ -1,5 +1,5 @@
 define say
-	$(info [Linux Makefile Template] $1)
+	$(info [Linux Makefile: Chapter 14] $1)
 endef
 
 #
@@ -53,12 +53,15 @@ clean:
 .PHONY: clean
 
 #
-$(BIN):	main_l.o
-	ld $(LINK_FLAGS) main_l.o -o $(BIN)
+$(BIN):	main_l.o stats_l.o
+	ld $(LINK_FLAGS) *_l.o -o $(BIN)
 
 #
-main_l.o:	main_l.asm
-	yasm $(YASM_FLAGS) main_l.asm -o main_l.o
+main_l.o:	main_l.asm 
+	yasm $(YASM_FLAGS) main_l.asm -o main_l.o -l main_l.list
 
+
+stats_l.o:	stats_l.asm
+	yasm $(YASM_FLAGS) stats_l.asm -o stats_l.o -l stats_l.list
 
 
