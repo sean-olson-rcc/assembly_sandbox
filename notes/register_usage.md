@@ -9,8 +9,6 @@
 | RCX | Counter register; Used for loop counters; 4th function argument |
 | RDX | Data register; Used for I/O operations; 3rd function argument |
 | RSI | Source index; Used for string operations; 2nd function argument |
-
-
 | RDI | Destination index; Used for string operations; 1st function argument |
 | RBP | Base pointer; Frame pointer for stack frames; Callee-saved |
 | RSP | Stack pointer; Points to top of stack; Automatically managed |
