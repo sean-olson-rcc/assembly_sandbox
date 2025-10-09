@@ -1,74 +1,90 @@
 define say
-	$(info [Signed Integer Division] $1)
+	$(info [Math Sample] $1)
 endef
+
+
+#
+CC := gcc
+ASM := yasm
+C_FLAGS := -c -Wall -gdwarf-2 -m64 -no-pie
+YASM_FLAGS := -f elf64 -g dwarf2 -Werror
+LINK_FLAGS := -Wall -gdwarf-2 -m64 -Werror -no-pie -z noexecstack
+
 
 #
 REPO_PATH := $(abspath .)
 $(call say,REPO_PATH: $(REPO_PATH))
 
-# C++ compiler and flags
-CPP := g++
-CPP_FLAGS := -Wall -m64 -g dwarf-2 -std=c++17 -c
-
-# C compiler and flags
-CC := gcc
-CC_FLAGS := -Wall -m64 -g dwarf-2
-
-#
-YASM_FLAGS := -f elf64 -g dwarf2
-LINK_FLAGS := -g
-
-LINKER := g++
-LINKER_FLAGS := -Wall -m64 -g dwarf-2 -no-pie -z noexecstack
 
 #
 BIN_NAME := main
 BIN := ./$(BIN_NAME)
+$(call say,Binary path: $(BIN))
+
 
 #
 default:	help
 .PHONY: default
 
+
+#
 help:
-	@echo "***** Makefile Menu *****"
+	@echo "***** Integer-Division Sample *****"
 	@echo
-	@echo "make help          ==> This menu"
+	@echo "make help         ==> This help menu"
 	@echo
-	@echo "make build         ==> Build the program"
-	@echo "make run           ==> Run the program"
-	@echo "make debug         ==> Debug the program"
+	@echo "make build        ==> Rebuild your project"
+	@echo "make run          ==> Run your project"
+	@echo "make debug        ==> Debug your project"
 	@echo
-	@echo "make clean         ==> Clean the build area"
+	@echo "make clean        ==> Clean temporary build files"
 	@echo
 .PHONY: help
+
 
 #
 build:	$(BIN)
 .PHONY: build
 
+
 #
-run:	$(BIN)
+run:	build
 	$(BIN)
 .PHONY: run
+
+
+#
+gradescope:
+	multirepo-blackbox-grader --config "$(REPO_PATH)/grader.yml" --repo "$(REPO_PATH)"
+.PHONY: gradescope
+
 
 #
 debug:	build
 	gdb $(BIN_NAME) -x gdb-commands.txt
 .PHONY: debug
 
+
 #
 clean:
-	-rm -f *.o
-	-rm -f $(BIN)
+	-rm *.o
+	-rm $(BIN)
 .PHONY: clean
 
-#
-$(BIN):	main.o stats.o
-	ld $(LINK_FLAGS) *.o -o $(BIN)
 
 #
-main.o:	main.asm 
-	yasm $(YASM_FLAGS) main.asm -o main.o -l main.list
+$(BIN):	main.o math.o
+	$(CC) $(LINK_FLAGS) *.o *.so -o $(BIN)
+
+
+#
+main.o:	main.c
+	$(CC) $(C_FLAGS) $< -o "$@"
+
+
+#
+math.o:	math.asm
+	$(ASM) $(YASM_FLAGS) $< -o "$@"
 
 
 
