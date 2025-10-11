@@ -78,19 +78,22 @@ section					.bss
 ; ----------------------------------------------------------
 section .text
 
-global _start
+global file_io
 
-_start:
+file_io:
 
 	call welcome
 	;call file_tests
 
 
 
+
 	; ---------------------------
 	; exit with success
-	mov rax,	SYS_EXIT
-	mov	rdi, EXIT_SUCCESS 
+	; mov rax,	SYS_EXIT
+	; mov	rdi, EXIT_SUCCESS 
+	; syscall
+	ret
 
 
 ; ---------------------------
@@ -128,6 +131,8 @@ print_null_terminated_string:
 	mov	r12,	rdi	
 	mov	r13,	rsi
 
+		call libPuhfessorP_printRegisters
+
 	; ------------
 	; compute the string's length
 	mov	rdi,	r12
@@ -139,7 +144,8 @@ print_null_terminated_string:
 	mov rax, 	SYS_WRITE
 	mov	rdi,	r13  	
 	mov	rsi,	r12  	
-	mov	rdx,	r14  	
+	mov	rdx,	r14  
+	syscall	
 
 	; ------------
 	; epilogue
