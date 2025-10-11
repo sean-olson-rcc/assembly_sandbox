@@ -161,6 +161,89 @@ file_tests:
 	pop r13
 	pop r12
 
+	ret
+
+; ---------------------------
+; long_FILE_HANDLE open_file_read(char * file_name, long flags)
+;
+; register usage:
+;		r12: file name char*
+;		r13: file flags
+;		r14: file handle
+
+
+open_file_read:
+
+	; ------------
+	; prologue
+	push	r12	
+	push	r13	
+	push	r14
+
+	; ------------
+	; grab incoming arguments
+	mov	r12,	rdi	
+	mov	r13,	rsi
+
+	; ------------
+	; attempt to open file with syscall
+	mov	rax,	SYS_OPEN
+	mov	rdi,	r12
+	mov	rsi,	r13
+	syscall
+
+	mov	r14,	rax
+	; ------------
+	; if successful, jump to success label
+	cmp	r14,	0
+	jge	open_file_read_success
+
+	; ------------
+	; local label: routine for failed file open
+	.open_file_read_fail:
+
+		; ------------
+		; print the fail message
+		mov	rdi,	MSG_FILE_OPEN_FAIL
+		mov	rsi, 	FD_STDERR
+		call print_null_terminated_string
+
+		mov	rdi,	r12
+		mov	rsi, 	FD_STDERR
+		call print_null_terminated_string
+		call print_newline
+
+		; ------------
+		; call the die routine
+		mov	rdi, MSG_DIE_FILE_OPEN
+		call die
+
+	; ------------
+	; local label: routine for success file open
+	.open_file_read_fail:
+
+		; ------------
+		; print the fail message
+		mov	rdi,	MSG_FILE_OPEN_SUCCESS
+		mov	rsi, 	FD_STDOUT
+		call print_null_terminated_string
+
+		mov	rdi,	r12
+		mov	rsi, 	FD_STDOUT
+		call print_null_terminated_string
+		call print_newline
+
+		; ------------
+		; return file handle
+		mov	rax, 	r14
+
+	; ------------
+	; epilogue
+	pop r14
+	pop r13
+	pop r12
+
+	ret
 
 ; ---------------------------
 ; void print_null_terminated_string()
@@ -181,8 +264,6 @@ print_null_terminated_string:
 	; grab incoming arguments
 	mov	r12,	rdi	
 	mov	r13,	rsi
-
-		call libPuhfessorP_printRegisters
 
 	; ------------
 	; compute the string's length
@@ -215,7 +296,6 @@ print_newline:
 	mov	rdx,	CRLF_LEN
 	syscall
 	ret
-
 
 ; ---------------------------
 ; int strlen(str * c-string)
