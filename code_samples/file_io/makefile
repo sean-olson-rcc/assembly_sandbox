@@ -1,15 +1,88 @@
+define say
+	$(info [file_io Sample] $1)
+endef
 
-test:
-	@echo "Hello"
 
-other_test:
-	@echo "Hello, again"
+#
+CC := gcc
+ASM := yasm
+C_FLAGS := -c -Wall -gdwarf-2 -m64 -no-pie
+YASM_FLAGS := -f elf64 -g dwarf2 -Werror
+LINK_FLAGS := -Wall -gdwarf-2 -m64 -Werror -no-pie -z noexecstack
 
-build: main
+
+#
+REPO_PATH := $(abspath .)
+$(call say,REPO_PATH: $(REPO_PATH))
+
+
+#
+BIN_NAME := main
+BIN := ./$(BIN_NAME)
+$(call say,Binary path: $(BIN))
+
+
+#
+default:	help
+.PHONY: default
+
+
+#
+help:
+	@echo "***** Integer-Division Sample *****"
+	@echo
+	@echo "make help         ==> This help menu"
+	@echo
+	@echo "make build        ==> Rebuild your project"
+	@echo "make run          ==> Run your project"
+	@echo "make debug        ==> Debug your project"
+	@echo
+	@echo "make clean        ==> Clean temporary build files"
+	@echo
+.PHONY: help
+
+
+#
+build:	$(BIN)
 .PHONY: build
 
-main:
-	ld -g dwarf2 -m64 -Werror -no-pie -z noexecstack -o main main.o
 
-main.o: main.asm
-	yasm -Werror -f elf64 -m amd64 -g dwarf2 -l main.list -o main.o main.asm
+#
+run:	build
+	$(BIN)
+.PHONY: run
+
+
+#
+gradescope:
+	multirepo-blackbox-grader --config "$(REPO_PATH)/grader.yml" --repo "$(REPO_PATH)"
+.PHONY: gradescope
+
+
+#
+debug:	build
+	gdb $(BIN_NAME) -x gdb-commands.txt
+.PHONY: debug
+
+
+#
+clean:
+	-rm *.o
+	-rm $(BIN)
+.PHONY: clean
+
+
+#
+$(BIN):	main.o file_io.o
+	$(CC) $(LINK_FLAGS) *.o *.so -o $(BIN)
+
+
+#
+main.o:	main.c
+	$(CC) $(C_FLAGS) $< -o "$@"
+
+
+#
+file_io.o:	file_io.asm
+	$(ASM) $(YASM_FLAGS) $< -o "$@"
+
