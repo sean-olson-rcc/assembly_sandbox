@@ -198,7 +198,7 @@ open_file_read:
 
 	; ------------
 	; local label: routine for failed file open
-	.open_file_read_fail:
+	open_file_read_fail:
 
 		; ------------
 		; print the fail message
@@ -218,7 +218,7 @@ open_file_read:
 
 	; ------------
 	; local label: routine for success file open
-	.open_file_read_success:
+	open_file_read_success:
 
 		; ------------
 		; print the fail message
