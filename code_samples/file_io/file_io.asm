@@ -170,8 +170,6 @@ file_tests:
 ;		r12: file name char*
 ;		r13: file flags
 ;		r14: file handle
-
-
 open_file_read:
 
 	; ------------
@@ -220,7 +218,7 @@ open_file_read:
 
 	; ------------
 	; local label: routine for success file open
-	.open_file_read_fail:
+	.open_file_read_success:
 
 		; ------------
 		; print the fail message
@@ -244,6 +242,66 @@ open_file_read:
 	pop r12
 
 	ret
+
+; ---------------------------
+; long_FILE_HANDLE create_file(char * file_name, long flags)
+;
+; register usage:
+;		r12: file name char*
+;		r13: file flags
+;		r14: file handle	
+
+create_file:
+
+	; ------------
+	; prologue
+	push	r12	
+	push	r13	
+	push	r14
+
+	; ------------
+	; grab incoming arguments
+	mov	r12,	rdi	
+	mov	r13,	rsi
+
+
+	; ------------
+	; epilogue
+	pop r14
+	pop r13
+	pop r12
+
+	ret	
+
+; ---------------------------
+; long_FILE_HANDLE copy_file(char * file_name, long flags)
+;
+; register usage:
+;		r12: file name char*
+;		r13: file flags
+;		r14: file handle	
+
+copy_file:
+
+	; ------------
+	; prologue
+	push	r12	
+	push	r13	
+	push	r14
+
+	; ------------
+	; grab incoming arguments
+	mov	r12,	rdi	
+	mov	r13,	rsi
+
+
+	; ------------
+	; epilogue
+	pop r14
+	pop r13
+	pop r12
+
+	ret		
 
 ; ---------------------------
 ; void print_null_terminated_string()
