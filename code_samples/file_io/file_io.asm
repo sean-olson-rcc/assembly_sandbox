@@ -302,32 +302,27 @@ copy_file:
 	ret	
 
 ; ---------------------------
-; long_FILE_HANDLE close_file(char * file_name, long flags)
+; void close_file(char * file_name)
 ;
 ; register usage:
-;		r12: file name char*
-;		r13: file flags
-;		r14: file handle	
+;		r12: file handle
 close_file:
 
 	; ------------
 	; prologue
 	push	r12	
-	push	r13	
-	push	r14
 
 	; ------------
 	; grab incoming arguments
 	mov	r12,	rdi	
-	mov	r13,	rsi
 
+	mov	rax,	SYS_CLOSE
+	mov rdi, 	r12
+	syscall
 
 	; ------------
 	; epilogue
-	pop r14
-	pop r13
 	pop r12
-
 	ret			
 
 ; ---------------------------
