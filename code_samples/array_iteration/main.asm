@@ -13,7 +13,7 @@ _start:
     xor ebx, ebx                  ; Clear ebx (this will hold the sum)
     xor esi, esi                  ; Initialize index (esi) to 0
 
-iterate:
+.iterate:
     cmp esi, ecx                   ; Compare index with the array length
     jge done                       ; If index >= length, jump to done
 
@@ -22,7 +22,7 @@ iterate:
     inc esi                        ; Increment the index
     jmp iterate                    ; Repeat the iteration
 
-done:
+.done:
     mov [sum], bl                  ; Store the sum into a variable (sum)
 
     ; Print the result
