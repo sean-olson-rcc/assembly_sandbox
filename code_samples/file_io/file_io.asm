@@ -38,7 +38,7 @@ FILE_NAME_TO_WRITE								db			"output.txt", 0
 
 ; ---------------------------
 ; file-open flags
-FILE_FLAGS_READ										equ			0
+FILE_FLAGS_TO_READ										equ			0
 
 
 ; ---------------------------
@@ -83,16 +83,14 @@ global file_io
 file_io:
 
 	call welcome
-	;call file_tests
-
-
-
+	call file_tests
 
 	; ---------------------------
-	; exit with success
+	; exit with success -- uncomment if this is the main function; otherwise use `ret`
 	; mov rax,	SYS_EXIT
 	; mov	rdi, EXIT_SUCCESS 
 	; syscall
+
 	ret
 
 
@@ -100,15 +98,68 @@ file_io:
 ; void welcome()
 ;
 ; register usage:
-;		r12: to store the divisor
-;		r14: to store the quotient
-;		r15: to store the remainder	
+;		none
 welcome:
 	mov	rdi,	MSG_INTRO
 	mov	rsi,	FD_STDOUT
 	call print_null_terminated_string
 	call print_newline
 	ret
+
+; ---------------------------
+; void file_tests()
+;
+; register usage:
+;		r12: input file handle
+;		r13: output file handle
+;		r14: count of bytes read from the input file
+file_tests:
+
+	; ------------
+	; prologue
+	push	r12	
+	push	r13	
+	push	r14
+
+	; ------------
+	; open the file to read
+	mov	rdi,	FILE_NAME_TO_READ
+	mov	rsi, FILE_FLAGS_TO_READ
+	call open_file_read
+	mov	r12,	rax
+
+	; ------------
+	; create file to write
+	mov	rdi,	FILE_NAME_TO_WRITE
+	mov	rsi, FILE_PERMS_STANDARD
+	call create_file
+	mov	r13,	rax
+
+	; ------------
+	; copy the input file to the output file
+	mov	rdi,	r12
+	mov	rsi,	r13
+	call copy_file
+
+	; ------------
+	; print success message
+	mov	rdi,	MSG_FILE_COPY_DONE
+	mov	rsi,	FD_STDOUT
+	call print_null_terminated_string
+	call print_newline
+
+	; ------------
+	; close both files
+	mov	rdi, r12
+	call	close_file
+	mov	rdi, r13
+	call	close_file
+
+	; ------------
+	; epilogue
+	pop r14
+	pop r13
+	pop r12
 
 
 ; ---------------------------
@@ -149,7 +200,6 @@ print_null_terminated_string:
 
 	; ------------
 	; epilogue
-
 	pop r14
 	pop r13
 	pop r12
@@ -186,3 +236,29 @@ strlen:
     
 	.done:
     ret                     ; Return with length in rax
+
+; ---------------------------
+; void die(char* message)
+;
+; register usage:
+;		r12: char* message
+
+die:
+
+	; ------------
+	; grab the incoming arguments
+	mov r12, rdi
+
+	; ------------
+	; print the message to standard error
+	mov rdi,	r12
+	mov	rsi, 	FD_STDERR
+	call print_null_terminated_string
+	call print_newline
+
+
+	; ------------
+	; exit the program
+	mov	rax,	SYS_EXIT
+	mov	rdi,	EXIT_FAIL
+	syscall		
