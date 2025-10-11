@@ -250,7 +250,6 @@ open_file_read:
 ;		r12: file name char*
 ;		r13: file flags
 ;		r14: file handle	
-
 create_file:
 
 	; ------------
@@ -280,7 +279,6 @@ create_file:
 ;		r12: file name char*
 ;		r13: file flags
 ;		r14: file handle	
-
 copy_file:
 
 	; ------------
@@ -301,7 +299,36 @@ copy_file:
 	pop r13
 	pop r12
 
-	ret		
+	ret	
+
+; ---------------------------
+; long_FILE_HANDLE close_file(char * file_name, long flags)
+;
+; register usage:
+;		r12: file name char*
+;		r13: file flags
+;		r14: file handle	
+close_file:
+
+	; ------------
+	; prologue
+	push	r12	
+	push	r13	
+	push	r14
+
+	; ------------
+	; grab incoming arguments
+	mov	r12,	rdi	
+	mov	r13,	rsi
+
+
+	; ------------
+	; epilogue
+	pop r14
+	pop r13
+	pop r12
+
+	ret			
 
 ; ---------------------------
 ; void print_null_terminated_string()
