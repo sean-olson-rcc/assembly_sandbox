@@ -327,12 +327,13 @@ create_file:
 	ret	
 
 ; ---------------------------
-; long_FILE_HANDLE copy_file(char * file_name, long flags)
+; void copy_file(long input_handle, long output_handle)
 ;
 ; register usage:
-;		r12: file name char*
-;		r13: file flags
-;		r14: file handle	
+;		r12: input handle
+;		r13: output handle
+;		r14: beginning of temp buffer
+;		r15: temp bytes read
 copy_file:
 
 	; ------------
@@ -340,15 +341,71 @@ copy_file:
 	push	r12	
 	push	r13	
 	push	r14
+	push	r15
+	push	rbp
 
 	; ------------
 	; grab incoming arguments
 	mov	r12,	rdi	
 	mov	r13,	rsi
 
+	; ------------
+	; make a buffer of the stack	
+	mov	rbp, rsp
+	sub	rsp,	COPY_BUFFER_LEN
+	mov	r14,	rsp
+
+	; ------------
+	; copy file iteration routine
+	copy_file_iterate:
+		mov	rax, SYS_READ
+		mov	rdi, r12
+		mov	rsi, r14
+		mov	rdx, COPY_BUFFER_LEN
+		syscall
+		mov	r15, rax
+		
+	; ------------
+	; verify that data was read
+	cmp	r15, 0
+	je	copy_file_done
+
+	; ------------
+	; write to the output file
+	mov	rax, SYS_WRITE
+	mov	rdi, r13
+	mov	rsi, r14
+	mov	rdx, r15
+	syscall
+
+	; ------------
+	; continue to read
+	jmp	copy_file_iterate
+
+	; ------------
+	; copy file done routine
+	copy_file_done:
+
+		; ------------
+		; print the fail message
+		mov	rdi,	MSG_FILE_COPY_DONE
+		mov	rsi, 	FD_STDOUT
+		call print_null_terminated_string
+
+		mov	rdi,	r12
+		mov	rsi, 	FD_STDOUT
+		call print_null_terminated_string
+
+		mov	rdi,	r13
+		mov	rsi, 	FD_STDOUT
+		call print_null_terminated_string
+				
+		call print_newline	
 
 	; ------------
 	; epilogue
+	pop rbp
+	pop r15
 	pop r14
 	pop r13
 	pop r12
