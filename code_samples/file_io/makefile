@@ -52,13 +52,6 @@ run:	build
 	$(BIN)
 .PHONY: run
 
-
-#
-gradescope:
-	multirepo-blackbox-grader --config "$(REPO_PATH)/grader.yml" --repo "$(REPO_PATH)"
-.PHONY: gradescope
-
-
 #
 debug:	build
 	gdb $(BIN_NAME) -x gdb-commands.txt
