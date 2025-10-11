@@ -79,18 +79,13 @@ section					.bss
 section .text
 
 global file_io
+extern	libPuhfessorP_printRegisters
 
 file_io:
 
 	call welcome
 	call file_tests
-
-	; ---------------------------
-	; exit with success -- uncomment if this is the main function; otherwise use `ret`
-	; mov rax,	SYS_EXIT
-	; mov	rdi, EXIT_SUCCESS 
-	; syscall
-
+s
 	ret
 
 
@@ -364,6 +359,7 @@ copy_file:
 		mov	rdx, COPY_BUFFER_LEN
 		syscall
 		mov	r15, rax
+
 		
 	; ------------
 	; verify that data was read
@@ -392,15 +388,20 @@ copy_file:
 		mov	rsi, 	FD_STDOUT
 		call print_null_terminated_string
 
-		mov	rdi,	r12
-		mov	rsi, 	FD_STDOUT
-		call print_null_terminated_string
+		call print_newline
 
-		mov	rdi,	r13
-		mov	rsi, 	FD_STDOUT
-		call print_null_terminated_string
+		; mov	rdi,	r12
+		; mov	rsi, 	FD_STDOUT
+		; call print_null_terminated_string
+
+		; mov	rdi,	r13
+		; mov	rsi, 	FD_STDOUT
+		; call print_null_terminated_string
 				
-		call print_newline	
+		; call print_newline	
+
+		call libPuhfessorP_printRegisters
+
 
 	; ------------
 	; epilogue
