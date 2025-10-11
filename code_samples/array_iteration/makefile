@@ -64,7 +64,7 @@ clean:
 
 #
 $(BIN):	main.o 
-	$(CC) $(LINK_FLAGS) *.o *.so -o $(BIN)
+	ld -g *.o -o $(BIN)
 
 
 #
