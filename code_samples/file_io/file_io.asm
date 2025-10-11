@@ -221,7 +221,7 @@ open_file_read:
 	open_file_read_success:
 
 		; ------------
-		; print the fail message
+		; print the success message
 		mov	rdi,	MSG_FILE_OPEN_SUCCESS
 		mov	rsi, 	FD_STDOUT
 		call print_null_terminated_string
@@ -244,7 +244,7 @@ open_file_read:
 	ret
 
 ; ---------------------------
-; long_FILE_HANDLE create_file(char * file_name, long flags)
+; long_FILE_HANDLE create_file(char * file_name, long perms)
 ;
 ; register usage:
 ;		r12: file name char*
@@ -263,6 +263,60 @@ create_file:
 	mov	r12,	rdi	
 	mov	r13,	rsi
 
+	; ------------
+	; make the syscall to create the file
+	mov	rax, 	SYS_CREATE
+	mov	rdi, 	r12
+	mov	rsi,	r13
+	syscall
+
+	; ------------
+	; save the file handle
+	mov	r14, rax
+
+	; ------------
+	; verify that the file was created
+	cmp r14, 0
+	jge create_file_success
+
+	; ------------
+	; local label: routine for failed file open
+	create_file_fail:
+
+		; ------------
+		; print the fail message
+		mov	rdi,	MSG_FILE_CREATE_FAIL
+		mov	rsi, 	FD_STDERR
+		call print_null_terminated_string
+
+		mov	rdi,	r12
+		mov	rsi, 	FD_STDERR
+		call print_null_terminated_string
+		call print_newline
+
+		; ------------
+		; call the die routine
+		mov	rdi, MSG_DIE_FILE_OPEN
+		call die
+
+	; ------------
+	; local label: routine for success file open
+	create_file_success:
+
+		; ------------
+		; print the fail message
+		mov	rdi,	MSG_FILE_CREATE_SUCCESS
+		mov	rsi, 	FD_STDOUT
+		call print_null_terminated_string
+
+		mov	rdi,	r12
+		mov	rsi, 	FD_STDOUT
+		call print_null_terminated_string
+		call print_newline
+
+		; ------------
+		; return file handle
+		mov	rax, 	r14	
 
 	; ------------
 	; epilogue
