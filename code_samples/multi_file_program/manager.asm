@@ -94,31 +94,12 @@ section .text
 		mov r12, rax
 
 		; ------------
-		; print return status from display_array()
-		mov rdi, MSG_INPUT_REVIEW 
-		mov rsi, MSG_INPUT_REVIEW_LEN 
-		call print_string
-		call print_newline
-
-		; ------------
 		; display the array
 		call display_array_routine
-
 
 		; ------------
 		; reverse the array
 		call reverse_array_routine
-
-		; ------------
-		; print status message before calling reverse_array()
-    mov rdi, MSG_REVERSE_ARRAY_REVIEW
-    mov rsi, MSG_REVERSE_ARRAY_REVIEW_LEN
-    call print_string
-		call print_newline	
-
-		; ------------
-		; display the array
-		call display_array_routine
 
 		; ------------
 		; print all of the fond farewells 
@@ -190,7 +171,12 @@ section .text
 	; void display_array_routine()
 	display_array_routine:
 
-
+		; ------------
+		; print return status from display_array()
+		mov rdi, MSG_INPUT_REVIEW 
+		mov rsi, MSG_INPUT_REVIEW_LEN 
+		call print_string
+		call print_newline
 
 		; ------------
 		; call the display_array function			
@@ -198,15 +184,11 @@ section .text
 		mov	rsi, INT_ARRAY_LEN
 		call display_array
 		
-
-
 		ret
 
 	; ---------------------------
 	; void reverse_array_routine()
 	reverse_array_routine:
-
-
 
 		; ------------
 		; call the reverse array method in c++ file	
@@ -215,9 +197,15 @@ section .text
 		call reverse_array
 
 		; ------------
-		; print return status from reverse_array()
-    mov rdi, MSG_RETURN_FROM_REVERSE_ARRAY
-    mov rsi, MSG_RETURN_FROM_REVERSE_ARRAY_LEN
+		; call the display_array function			
+		mov rdi, INT_ARRAY
+		mov	rsi, INT_ARRAY_LEN
+		call display_array
+		
+		; ------------
+		; print status message before calling reverse_array()
+    mov rdi, MSG_REVERSE_ARRAY_REVIEW
+    mov rsi, MSG_REVERSE_ARRAY_REVIEW_LEN
     call print_string
 		call print_newline	
 
