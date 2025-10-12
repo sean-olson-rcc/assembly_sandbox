@@ -80,15 +80,15 @@ section .text
 		; call libPuhfessorP_printSignedInteger64
 		; call print_newline
 
+		; ------------
+		; verify that the array is not empty
+		cmp rbx, r13 
+		je display_array_done  
 
 		; ------------
 		; loop through the array  
 		display_array_loop:
-			; ------------
-			; jump out of loop if counter is equal to the length  
-			cmp rbx, r13 
-			je display_array_done  
-			
+
 			; ------------
 			; assign the current value to the argument register and add to accumulator
 			mov rdi, [r12 + rbx*8] 
@@ -97,6 +97,14 @@ section .text
 			; ------------
 			; print out the 64-bit int with the lib function and the separator
 			call libPuhfessorP_printSignedInteger64 
+
+			; ------------
+			; jump out of loop if counter is equal to the length  
+			cmp rbx, r13 
+			je display_array_done 
+
+			; ------------
+			; print the comma separator if not the last element in the array
 			call print_separator
 			
 			; ------------
