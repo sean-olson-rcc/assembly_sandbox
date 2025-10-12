@@ -14,7 +14,7 @@ section					.data
 	MSG_GREET_LEN										equ			$-MSG_GREET
 
 
-	MSG_CALLING_DISPLAY_ARRAY						db 			"Calling display_array() another assembly-code file."
+	MSG_CALLING_DISPLAY_ARRAY						db 			"Calling display_array() in another assembly-code file."
 	MSG_CALLING_DISPLAY_ARRAY_LEN				equ			$-MSG_CALLING_DISPLAY_ARRAY	
 
 	MSG_RETURN_FROM_DISPLAY_ARRAY				db 			"Returned to manager.asm from calling display_array() function in another assembly-code file."
@@ -95,11 +95,11 @@ section .text
     call print_string
 		call print_newline
 
-		; ; ------------
-		; ; call the reverse array method in c++ file	
-		; mov	rdi,	INT_ARRAY
-		; mov	rsi,	INT_ARRAY_LEN
-		; call reverse_array
+		; ------------
+		; call the reverse array method in c++ file	
+		mov	rdi,	INT_ARRAY
+		mov	rsi,	INT_ARRAY_LEN
+		call reverse_array
 
 		; ------------
 		; print return status from reverse_array()
