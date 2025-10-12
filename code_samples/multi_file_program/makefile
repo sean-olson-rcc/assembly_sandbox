@@ -73,7 +73,7 @@ clean:
 
 
 #
-$(BIN):	main.o the_asm_file.o display_array.o assembly_utilities.0
+$(BIN):	main.o the_asm_file.o display_array.o assembly_utilities.o
 	$(CPP) $(LINK_FLAGS) *.o  *.so -o $(BIN)
 
 #
