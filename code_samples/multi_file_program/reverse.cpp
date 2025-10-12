@@ -3,28 +3,25 @@ using namespace std;
 
 extern "C" long* reverse_array(long* arr, int length) {
 
-	cout << "In the reverse.cpp file\n" << endl;
-  // // verify that a valid array was passed  
-	// if (!arr || length <= 1) {
-	// 		cout << "[reverse_array()] ERROR: array passed to function was wither null or empty" << endl;
-	// 		return arr; 
-	// 	}	
+  // verify that a valid array was passed  
+			return arr; 
+		}	
 
-	// 	// initialize the indexes
-  //   int start = 0;
-  //   int end = length - 1;
+		// initialize the indexes
+    int start = 0;
+    int end = length - 1;
 
-	// 	// loop through the array, swapping first and last values
-  //   while (start < end) {
-  //       int temp = arr[start];
-  //       arr[start] = arr[end];
-  //       arr[end] = temp;
+		// loop through the array, swapping first and last values
+    while (start < end) {
+        int temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
 
-  //       start++;
-  //       end--;
-  //   }
+        start++;
+        end--;
+    }
 
-  //   return arr;
-	cout << "Returning from the reverse.cpp file\n" << endl;	
+    return arr;
+
 	return arr;
 }
