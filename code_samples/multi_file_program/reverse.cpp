@@ -1,7 +1,7 @@
 #include <iostream>
 using namespace std;
 
-extern "C" int* reverse_array(int* arr, int length) {
+extern "C" int* reverse_array(long* arr, int length) {
 
 	cout << "In the reverse.cpp file\n" << endl;
   // // verify that a valid array was passed  
