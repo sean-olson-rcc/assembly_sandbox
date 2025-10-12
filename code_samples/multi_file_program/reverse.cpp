@@ -26,4 +26,5 @@ extern "C" int* reverse_array(int* arr, int length) {
 
   //   return arr;
 	cout << "Returning from the reverse.cpp file\n" << endl;	
+	return 0
 }
