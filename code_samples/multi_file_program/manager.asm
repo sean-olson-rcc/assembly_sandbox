@@ -38,21 +38,21 @@ section					.data
 	; ---------------------------
 	; debug data
 	INT_VALUE											dq			100
-	INT_ARRAY 											dq 			10, 20, 30, 40, 50 
+	INT_ARRAY 										dq 			10, 20, 30, 40, 50 
 	INT_ARRAY_LEN									dq			5	
 
 ; ----------------------------------------------------------
 ;  text section
 ; ----------------------------------------------------------
 section .text
-	global int_from_asm_a
+	global manager
 	extern display_array
 	extern print_string
 	extern print_newline	
 
 	; ---------------------------
-	; int int_from_asm_a()
-	int_from_asm_a:
+	; int manager()
+	manager:
 
 		; ------------
 		; print greeting	
