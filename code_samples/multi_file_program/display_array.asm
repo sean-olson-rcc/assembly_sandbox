@@ -71,7 +71,7 @@ section .text
 
 		; ------------
 		; print test value
-		mov	rdi, [r13]
+		mov	rdi, r13
 		call libPuhfessorP_printSignedInteger64
 		call print_newline
 
