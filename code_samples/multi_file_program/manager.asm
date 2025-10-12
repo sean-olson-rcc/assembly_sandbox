@@ -95,11 +95,11 @@ section .text
     call print_string
 		call print_newline
 
-		; ------------
-		; call the reverse array method in c++ file	
-		mov	rdi,	INT_ARRAY
-		mov	rsi,	INT_ARRAY_LEN
-		call reverse_array
+		; ; ------------
+		; ; call the reverse array method in c++ file	
+		; mov	rdi,	INT_ARRAY
+		; mov	rsi,	INT_ARRAY_LEN
+		; call reverse_array
 
 		; ------------
 		; print return status from reverse_array()
