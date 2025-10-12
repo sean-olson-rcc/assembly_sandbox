@@ -30,6 +30,7 @@ section					.data
 
 	; ---------------------------
 	; debug data
+	INT_VALUE												dq			64
 
 ; ----------------------------------------------------------
 ;  text section
@@ -42,7 +43,18 @@ section .text
 
 	; ---------------------------
 	; void display_array()
+	;
+	;	register usage:
+	;		rbp: preserved and restored to manage stack alignment
+	;		r12: hold the array pointer
+	;		r13: hold the array length
 	display_array:
+
+		; ------------
+		; preserve and stack align
+		push rbp
+		push r12	
+		push r13
 
 		; ------------
 		; print greeting	
@@ -51,8 +63,15 @@ section .text
     call print_string
 		call print_newline
 
+		; ------------
+		; capture the arguments	
+		mov	r12,	rdi
+		mov r13,	rsi
 
-
+		; ------------
+		; print greeting
+		mov	rdi INT_VALUE
+		call libPuhfessorP_printSignedInteger64
 
 		; ------------
 		; print goodbye	
@@ -60,5 +79,11 @@ section .text
     mov rsi, MSG_GOOD_BYE_LEN  
     call print_string
 		call print_newline
+
+		; ------------
+		; restore and stack align
+		push r13
+		push r12	
+		push rbp		
 
 		ret
