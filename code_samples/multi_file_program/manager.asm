@@ -64,26 +64,57 @@ section .text
     call print_string
 		call print_newline
 
+
 		; ------------
-		; print status message before calling display_array()
-    mov rdi, MSG_CALLING_DISPLAY_ARRAY
-    mov rsi, MSG_CALLING_DISPLAY_ARRAY_LEN
+		; display the array
+		call display_array_routine
+
+
+		; ------------
+		; reverse the array
+		call reverse_array_routine
+	
+		; ------------
+		; print farewell	
+    mov rdi, MSG_GOOD_BYE 
+    mov rsi, MSG_GOOD_BYE_LEN  
     call print_string
 		call print_newline		
+
+		; ------------
+		; set return value
+		mov rax, [INT_VALUE]
+		ret
+
+	; ---------------------------
+	; void display_array_routine()
+	display_array_routine:
+
+		; ------------
+		; print status message before calling display_array()
+		mov rdi, MSG_CALLING_DISPLAY_ARRAY
+		mov rsi, MSG_CALLING_DISPLAY_ARRAY_LEN
+		call print_string
+		call print_newline
 
 		; ------------
 		; call the display_array function			
 		mov rdi, INT_ARRAY
 		mov	rsi, INT_ARRAY_LEN
 		call display_array
-
+		
 		; ------------
 		; print return status from display_array()
-    mov rdi, MSG_RETURN_FROM_DISPLAY_ARRAY 
-    mov rsi, MSG_RETURN_FROM_DISPLAY_ARRAY_LEN 
-    call print_string
+		mov rdi, MSG_RETURN_FROM_DISPLAY_ARRAY 
+		mov rsi, MSG_RETURN_FROM_DISPLAY_ARRAY_LEN 
+		call print_string
 		call print_newline
 
+		ret
+
+	; ---------------------------
+	; void reverse_array_routine()
+	reverse_array_routine:
 
 		; ------------
 		; print status message before calling reverse_array()
@@ -103,16 +134,7 @@ section .text
     mov rdi, MSG_RETURN_FROM_REVERSE_ARRAY
     mov rsi, MSG_RETURN_FROM_REVERSE_ARRAY_LEN
     call print_string
-		call print_newline		
+		call print_newline	
 
-		; ------------
-		; print greeting	
-    mov rdi, MSG_GOOD_BYE 
-    mov rsi, MSG_GOOD_BYE_LEN  
-    call print_string
-		call print_newline		
-
-		; ------------
-		; set return value
-		mov rax, [INT_VALUE]
 		ret
+		
