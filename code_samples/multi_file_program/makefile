@@ -73,7 +73,7 @@ clean:
 
 
 #
-$(BIN):	main.o the_asm_file.o display_array.o assembly_utilities.o
+$(BIN):	main.o manager.o display_array.o assembly_utilities.o reverse.o
 	$(CPP) $(LINK_FLAGS) *.o  *.so -o $(BIN)
 
 #
@@ -81,15 +81,11 @@ main.o:	main.c
 	$(CC) $(C_FLAGS) $< -o "$@"
 
 #
-# reverse.o:	reverse.cpp
-# 	$(CPP) $(CPP_FLAGS) $< -o "$@"	
+reverse.o:	reverse.cpp
+	$(CPP) $(CPP_FLAGS) $< -o "$@"	
 
 #
-# manager.o:	manager.asm
-# 
-
-#
-the_asm_file.o:	the_asm_file.asm
+manager.o:	manager.asm
 	$(ASM) $(YASM_FLAGS) $< -o "$@"
 
 #
