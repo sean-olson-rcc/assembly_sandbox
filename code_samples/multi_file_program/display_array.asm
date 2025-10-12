@@ -88,7 +88,11 @@ section .text
 		; ------------
 		; loop through the array  
 		display_array_loop:
-
+			; ------------
+			; jump out of loop if counter is equal to the length  
+			cmp rbx, r13 
+			; je display_array_done  
+			
 			; ------------
 			; assign the current value to the argument register and add to accumulator
 			mov rdi, [r12 + rbx*8] 
@@ -97,26 +101,14 @@ section .text
 			; ------------
 			; print out the 64-bit int with the lib function and the separator
 			call libPuhfessorP_printSignedInteger64 
-
-			; ------------
-			; increment the loop and jump out of loop if counter is equal to the length 
-			inc rbx  
-			cmp rbx, r13 
-			je display_array_done 
-
-			; ------------
-			; print the comma separator if not the last element in the array
-			call print_separator
 			
-	
-		display_array_done:
-		; ------------
-		; print goodbye	
-    mov rdi, MSG_GOOD_BYE
-    mov rsi, MSG_GOOD_BYE_LEN  
-    call print_string
-		call print_newline
+			; ------------
+			; increment the counter and go back to the beginning of the loop	
+			inc rbx   
+			cmp rbx, r13
+			jl	print_separator		
 
+		display_array_done:
 		; ------------
 		; set the return value
 		mov rax, r8
@@ -130,14 +122,14 @@ section .text
 
 		ret
 
-	; ---------------------------
-	; void print_separator()
-	;
-	;	register usage: none
-	print_separator:
-		mov rax, 	SYS_WRITE
-		mov rdi,	FD_STDOUT
-		mov	rsi,	SEPARATOR
-		mov	rdx,	2
-		syscall
-		ret
+		; ---------------------------
+		; void print_separator()
+		;
+		;	register usage: none
+		print_separator:
+			mov rax, 	SYS_WRITE
+			mov rdi,	FD_STDOUT
+			mov	rsi,	SEPARATOR
+			mov	rdx,	2
+			syscall
+			jmp display_array_loop
