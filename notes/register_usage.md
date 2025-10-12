@@ -21,6 +21,24 @@
 | R14 | General purpose; Callee-saved |
 | R15 | General purpose; Callee-saved |
 
+
+### Note on preserving 64-bit General Purpose Registers
+#### Registers you DON'T need to preserve (caller-saved):
+
+- rax - return value register
+- rdi, rsi, rdx, rcx, r8, r9 - argument registers
+- r10, r11 - temporary/scratch registers
+
+These are "caller-saved," meaning the caller expects them to be trashed, so your function can freely use them without preservation.
+#### Registers you MUST preserve (callee-saved):
+
+- rbx
+- rbp - base pointer (if you use it)
+- r12, r13, r14, r15
+- rsp - stack pointer (must be at the same position when you return)
+
+If your assembly function uses any of these, you need to push them on entry and pop them before returning.
+
 ## 32-bit General Purpose Registers (x86)
 
 | Register | Usage |
