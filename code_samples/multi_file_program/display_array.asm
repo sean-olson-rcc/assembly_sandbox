@@ -99,7 +99,8 @@ section .text
 			call libPuhfessorP_printSignedInteger64 
 
 			; ------------
-			; jump out of loop if counter is equal to the length  
+			; increment the loop and jump out of loop if counter is equal to the length 
+			inc rbx  
 			cmp rbx, r13 
 			je display_array_done 
 
@@ -107,12 +108,7 @@ section .text
 			; print the comma separator if not the last element in the array
 			call print_separator
 			
-			; ------------
-			; increment the counter and go back to the beginning of the loop	
-			inc rbx   
-			jmp display_array_loop		
-
-
+	
 		display_array_done:
 		; ------------
 		; print goodbye	
