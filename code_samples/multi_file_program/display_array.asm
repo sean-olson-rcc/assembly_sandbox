@@ -17,8 +17,7 @@ section					.data
 	MSG_GOOD_BYE										db 			"Leaving the display_array.asm code"
 	MSG_GOOD_BYE_LEN								equ			$-MSG_GOOD_BYE	
 
-	MSG_CRLF												db 			13, 10
-	MSG_CRLF_LEN										equ			$-MSG_CRLF
+	SEPARATOR												db			", "
 
 	; ---------------------------
 	; system calls
@@ -68,13 +67,39 @@ section .text
     mov rsi, MSG_GREET_LEN  
     call print_string
 		call print_newline
-		
-		; ------------
-		; print test value
-		mov	rdi, r13
-		call libPuhfessorP_printSignedInteger64
-		call print_newline
 
+		; ; ------------
+		; ; print test value
+		; mov	rdi, r13
+		; call libPuhfessorP_printSignedInteger64
+		; call print_newline
+
+
+		; ------------
+		; loop through the array  
+		display_array_loop:
+			; ------------
+			; jump out of loop if counter is equal to the length  
+			cmp rbx, r13 
+			je display_array_done  
+			
+			; ------------
+			; assign the current value to the argument register and add to accumulator
+			mov rdi, [r12 + rbx*8] 
+			add	r14,	rdi
+
+			; ------------
+			; print out the 64-bit int with the lib function and the separator
+			call libPuhfessorP_printSignedInteger64 
+			call print_separator
+			
+			; ------------
+			; increment the counter and go back to the beginning of the loop	
+			inc rbx   
+			jmp display_array_loop		
+
+
+		display_array_done:
 		; ------------
 		; print goodbye	
     mov rdi, MSG_GOOD_BYE
@@ -89,4 +114,11 @@ section .text
 		pop rbx
 		pop rbp		
 
+		ret
+	print_separator:
+		mov rax, 	SYS_WRITE
+		mov rdi,	FD_STDOUT
+		mov	rsi,	SEPARATOR
+		mov	rdx,	2
+		syscall
 		ret
