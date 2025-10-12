@@ -58,17 +58,17 @@ section .text
 		push r13
 
 		; ------------
+		; capture the arguments	
+		mov	r12,	rdi
+		mov r13,	rsi
+
+		; ------------
 		; print greeting	
     mov rdi, MSG_GREET 
     mov rsi, MSG_GREET_LEN  
     call print_string
 		call print_newline
-
-		; ------------
-		; capture the arguments	
-		mov	r12,	rdi
-		mov r13,	rsi
-
+		
 		; ------------
 		; print test value
 		mov	rdi, r13
