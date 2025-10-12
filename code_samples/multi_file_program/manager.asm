@@ -146,16 +146,15 @@ section .text
 		;PSDEUDO CODE:
 			; zero out a counter to track the number of element is the array
 			; begin a user input loop with the following steps:
-				; call print_string using the MSG_INPUT_PROMPT string
+				; call print_input_prompt
 				; call the extern function libPuhfessorP_inputSignedInteger64() which captures the user input
 				; verify that the input was a number.  If it is:
 						; append it to the array defined in the .data section
 						; increment the counter
-						; call the print_string function sending the MSG_INPUT_FEEDBACK input string
-						; then call the libPuhfessorP_printSignedInteger64 function, printing the input value to the screen
+						; call the print_input_feedback function sending the value in the rdi register
 						; begin the input loop again
 				; if it's not a number, specifically the letter q:
-						; call print_string function with the MSG_INPUT_COMPLETE message
+						; call print_input_complete_message
 						; end the loop and move on to the restore routine, popping registers
 
 
@@ -165,7 +164,70 @@ section .text
 
 		ret
 
+	; ---------------------------
+	; void print_input_prompt(void)
+	;
+	; register usage: none
+	print_input_prompt:
+		mov rdi, MSG_INPUT_PROMPT
+		mov rsi, MSG_INPUT_PROMPT_LEN
+		call print_string
+		call print_newline
+		ret		
 
+	; ---------------------------
+	; void print_input_prompt(void)
+	;
+	; register usage: none
+	print_input_feedback:
+
+		; ------------
+		; preserve and stack align
+		push rbp
+		push rbx
+		push r12	
+		push r13
+
+		; ------------
+		; capture the arguments	
+		mov	r12,	rdi
+
+		; ------------
+		; print feedback text	
+		mov rdi, MSG_INPUT_FEEDBACK
+		mov rsi, MSG_INPUT_FEEDBACK_LEN
+		call print_string		
+
+		; ------------
+		; assign the current value to the argument register
+		mov rdi, [r12] 
+
+		; ------------
+		; print out the 64-bit int with the lib function and the separator
+		call libPuhfessorP_printSignedInteger64 		
+
+		; ------------
+		; restore and stack align
+		pop r13
+		pop r12	
+		pop rbx
+		pop rbp	
+
+		call print_newline
+
+		ret		
+
+
+	; ---------------------------
+	; void print_input_complete_message(void)
+	;
+	; register usage: none
+	print_input_complete_message:
+		mov rdi, MSG_INPUT_COMPLETE
+		mov rsi, MSG_INPUT_COMPLETE_LEN
+		call print_string
+		call print_newline
+		ret				
 
 	; ---------------------------
 	; void display_array_routine()
