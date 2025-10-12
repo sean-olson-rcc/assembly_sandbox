@@ -47,6 +47,7 @@ section					.data
 section .text
 	global manager
 	extern display_array
+	extern reverse
 	extern print_string
 	extern print_newline	
 
@@ -80,6 +81,8 @@ section .text
     mov rsi, MSG_RETURN_FROM_OTHER_ASM_LEN 
     call print_string
 		call print_newline
+
+		call reverse
 
 		; ------------
 		; print greeting	
