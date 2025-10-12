@@ -83,8 +83,8 @@ section .text
 
 		; ------------
 		; restore and stack align
-		push r13
-		push r12	
-		push rbp		
+		pop r13
+		pop r12	
+		pop rbp		
 
 		ret
