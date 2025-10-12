@@ -47,6 +47,7 @@ section .text
 	;		rbp: preserved and restored to manage stack alignment
 	;		r12: hold the array pointer
 	;		r13: hold the array length
+	;		r8: holds the cumulative value of the array elements
 	display_array:
 
 		; ------------
@@ -60,6 +61,11 @@ section .text
 		; capture the arguments	
 		mov	r12,	rdi
 		mov r13,	rsi
+
+		; ------------
+		; zero-out the counters 
+		xor rbx, rbx
+		xor	r8, r8  
 
 		; ------------
 		; print greeting	
@@ -86,7 +92,7 @@ section .text
 			; ------------
 			; assign the current value to the argument register and add to accumulator
 			mov rdi, [r12 + rbx*8] 
-			add	r14,	rdi
+			add	r8,	rdi
 
 			; ------------
 			; print out the 64-bit int with the lib function and the separator
@@ -108,6 +114,10 @@ section .text
 		call print_newline
 
 		; ------------
+		; set the return value
+		mov rax, r8
+
+		; ------------
 		; restore and stack align
 		pop r13
 		pop r12	
@@ -115,6 +125,11 @@ section .text
 		pop rbp		
 
 		ret
+
+	; ---------------------------
+	; void print_separator()
+	;
+	;	register usage: none
 	print_separator:
 		mov rax, 	SYS_WRITE
 		mov rdi,	FD_STDOUT
