@@ -46,5 +46,5 @@ section .text
 
 		; ------------
 		; set return value
-		mov rax, int_value
+		mov rax, [int_value]
 		ret
