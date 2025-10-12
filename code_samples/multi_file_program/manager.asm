@@ -41,7 +41,7 @@ section					.data
 	; debug data
 	INT_VALUE														dq			100
 	INT_ARRAY 													dq 			10, 20, 30, 40, 50 
-	INT_ARRAY_LEN												dq			5	
+	INT_ARRAY_LEN												equ			5	
 
 ; ----------------------------------------------------------
 ;  text section
