@@ -1,4 +1,4 @@
-; ----------------------------------------------------------
+_CALLING_DISPLAY_ARRAY; ----------------------------------------------------------
 ; the_asm_file.asm
 ; ----------------------------------------------------------
 
@@ -14,12 +14,17 @@ section					.data
 	MSG_GREET_LEN										equ			$-MSG_GREET
 
 
-	MSG_CALLING_OTHER_ASM						db 			"Calling display_array() another assembly-code file."
-	MSG_CALLING_OTHER_ASM_LEN				equ			$-MSG_CALLING_OTHER_ASM	
+	MSG_CALLING_DISPLAY_ARRAY						db 			"Calling display_array() another assembly-code file."
+	MSG_CALLING_DISPLAY_ARRAY_LEN				equ			$-MSG_CALLING_DISPLAY_ARRAY	
 
-	MSG_RETURN_FROM_OTHER_ASM				db 			"Returned to the_asm_file.asm from calling display_array() function in another assembly-code file."
-	MSG_RETURN_FROM_OTHER_ASM_LEN		equ			$-MSG_RETURN_FROM_OTHER_ASM	
+	MSG_RETURN_FROM_DISPLAY_ARRAY				db 			"Returned to manager.asm from calling display_array() function in another assembly-code file."
+	MSG_RETURN_FROM_DISPLAY_ARRAY_LEN		equ			$-MSG_RETURN_FROM_DISPLAY_ARRAY
 
+	MSG_CALLING_REVERSE_ARRAY						db 			"Calling reverse_array() a C++ file."
+	MSG_CALLING_REVERSE_ARRAY_LEN				equ			$-MSG_CALLING_REVERSE_ARRAY	
+
+	MSG_RETURN_FROM_REVERSE_ARRAY				db 			"Returned to manager.asm from calling reverse_array() function in a C++ code file."
+	MSG_RETURN_FROM_REVERSE_ARRAY_LEN		equ			$-MSG_RETURN_FROM_REVERSE_ARRAY		
 
 	MSG_GOOD_BYE										db 			"Leaving the_asm_file.asm.  Good bye!"
 	MSG_GOOD_BYE_LEN								equ			$-MSG_GOOD_BYE
@@ -63,9 +68,9 @@ section .text
 		call print_newline
 
 		; ------------
-		; print status message
-    mov rdi, MSG_CALLING_OTHER_ASM
-    mov rsi, MSG_CALLING_OTHER_ASM_LEN
+		; print status message before calling display_array()
+    mov rdi, MSG_CALLING_DISPLAY_ARRAY
+    mov rsi, MSG_CALLING_DISPLAY_ARRAY_LEN
     call print_string
 		call print_newline		
 
@@ -76,13 +81,32 @@ section .text
 		call display_array
 
 		; ------------
-		; print greeting	
-    mov rdi, MSG_RETURN_FROM_OTHER_ASM 
-    mov rsi, MSG_RETURN_FROM_OTHER_ASM_LEN 
+		; print return status from display_array()
+    mov rdi, MSG_RETURN_FROM_DISPLAY_ARRAY 
+    mov rsi, MSG_RETURN_FROM_DISPLAY_ARRAY_LEN 
     call print_string
 		call print_newline
 
+
+		; ------------
+		; print status message before calling reverse_array()
+    mov rdi, MSG_CALLING_REVERSE_ARRAY
+    mov rsi, MSG_CALLING_REVERSE_ARRAY_LEN
+    call print_string
+		call print_newline
+
+		; ------------
+		; call the reverse array method in c++ file	
+		mov	rdi,	INT_ARRAY
+		mov	rsi,	INT_ARRAY_LEN
 		call reverse_array
+
+		; ------------
+		; print return status from reverse_array()
+    mov rdi, MSG_RETURN_FROM_REVERSE_ARRAY
+    mov rsi, MSG_RETURN_FROM_REVERSE_ARRAY_LEN
+    call print_string
+		call print_newline		
 
 		; ------------
 		; print greeting	
