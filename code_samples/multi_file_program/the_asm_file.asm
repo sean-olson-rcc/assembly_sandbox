@@ -34,9 +34,9 @@ section					.data
 
 	; ---------------------------
 	; debug data
-	int_value												dq			100
-	int_array 											dq 			10, 20, 30, 40, 50 
-	int_array_len										dq			5	
+	INT_VALUE											dq			100
+	INT_ARRAY 											dq 			10, 20, 30, 40, 50 
+	INT_ARRAY_LEN									dq			5	
 
 ; ----------------------------------------------------------
 ;  text section
@@ -58,10 +58,12 @@ section .text
     call print_string
 		call print_newline
 
-
+		; ------------
+		; call the display_array function			
+		mov rdi, INT_ARRAY
+		mov	rsi, INT_ARRAY_LEN
 		call display_array
-
-
+		
 		; ------------
 		; print greeting	
     mov rdi, MSG_GOOD_BYE 
@@ -71,7 +73,7 @@ section .text
 
 		; ------------
 		; set return value
-		mov rax, [int_value]
+		mov rax, [INT_VALUE]
 		ret
 
 
