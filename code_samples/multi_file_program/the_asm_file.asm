@@ -14,8 +14,12 @@ section					.data
 	MSG_GREET_LEN										equ			$-MSG_GREET
 
 
-	MSG_CALLING_OTHER_ASM						db 			"In the_asm_file.asm"
+	MSG_CALLING_OTHER_ASM						db 			"Calling functions from other assembly code file"
 	MSG_CALLING_OTHER_ASM_LEN				equ			$-MSG_CALLING_OTHER_ASM	
+
+
+	MSG_GOOD_BYE										db 			"Leaving the_asm_file.asm.  Good bye!"
+	MSG_GOOD_BYE_LEN								equ			$-MSG_GOOD_BYE
 
 	MSG_CRLF												db 			13, 10
 	MSG_CRLF_LEN										equ			$-MSG_CRLF
@@ -40,6 +44,8 @@ section					.data
 section .text
 	global int_from_asm_a
 	extern display_array
+	extern print_string
+	extern print_newline	
 
 	; ---------------------------
 	; int int_from_asm_a()
@@ -51,6 +57,17 @@ section .text
     mov rsi, MSG_GREET_LEN  
     call print_string
 		call print_newline
+
+
+		call display_array
+
+
+		; ------------
+		; print greeting	
+    mov rdi, MSG_GOOD_BYE 
+    mov rsi, MSG_GOOD_BYE_LEN  
+    call print_string
+		call print_newline		
 
 		; ------------
 		; set return value
@@ -64,45 +81,45 @@ section .text
 	;	register usage
 	;		r8:	string to be printed
 	;		r9:	string length
-	print_string:		
+	; print_string:		
 
-		; ------------
-		; preserve - none
+	; 	; ------------
+	; 	; preserve - none
 
-		; ------------
-		; grab the arguments	
-		mov r8,	rdi
-		mov	r9,	rsi
+	; 	; ------------
+	; 	; grab the arguments	
+	; 	mov r8,	rdi
+	; 	mov	r9,	rsi
 		
-		; ------------
-		; set the arguments and make the syscall			
-		mov rax,	SYS_WRITE
-		mov	rdi,	FD_STDOUT
-		mov	rsi,	r8
-		mov	rdx,	r9
-		syscall
+	; 	; ------------
+	; 	; set the arguments and make the syscall			
+	; 	mov rax,	SYS_WRITE
+	; 	mov	rdi,	FD_STDOUT
+	; 	mov	rsi,	r8
+	; 	mov	rdx,	r9
+	; 	syscall
 
-		; ------------
-		; restore - none
+	; 	; ------------
+	; 	; restore - none
 
-		ret
+	; 	ret
 
-	; ---------------------------
-	; void print_newline()
-	print_newline:	
+	; ; ---------------------------
+	; ; void print_newline()
+	; print_newline:	
 		
-		; ------------
-		; preserve - none
+	; 	; ------------
+	; 	; preserve - none
 		
-		; ------------
-		; set the arguments and make the syscall			
-		mov rax,	SYS_WRITE
-		mov	rdi,	FD_STDOUT
-		mov	rsi,	MSG_CRLF
-		mov	rdx,	MSG_CRLF_LEN
-		syscall
+	; 	; ------------
+	; 	; set the arguments and make the syscall			
+	; 	mov rax,	SYS_WRITE
+	; 	mov	rdi,	FD_STDOUT
+	; 	mov	rsi,	MSG_CRLF
+	; 	mov	rdx,	MSG_CRLF_LEN
+	; 	syscall
 
-		; ------------
-		; restore - none
+	; 	; ------------
+	; 	; restore - none
 
-		ret	
+	; 	ret	
