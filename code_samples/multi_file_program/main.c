@@ -10,7 +10,7 @@ int main(void) {
 
     long mean_value = manager(); // assign return value from assembly
 
-    printf("\n Main received this number %ld.\n", mean_value);
+    printf("\nMain received this number %ld.\n", mean_value);
     printf("Main will return 0 to the operating system. Bye!\n");
 
     return 0;
