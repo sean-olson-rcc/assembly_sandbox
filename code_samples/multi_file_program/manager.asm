@@ -10,38 +10,59 @@ section					.data
 
 	; ---------------------------
 	; strings
-	MSG_GREET														db 			"In the_asm_file.asm"
+	MSG_GREET														db 			"This program will reverse your array of integers."
 	MSG_GREET_LEN												equ			$-MSG_GREET
 
+	MSG_INPUT_INSTRUCTION								db 			"Enter a sequence of long integers separated by the enter key (one integer per line). Enter 'q' to quit."
+	MSG_INPUT_INSTRUCTION_LEN						equ			$-MSG_INPUT_INSTRUCTION	
 
-	MSG_CALLING_DISPLAY_ARRAY						db 			"Calling display_array() in another assembly-code file."
-	MSG_CALLING_DISPLAY_ARRAY_LEN				equ			$-MSG_CALLING_DISPLAY_ARRAY	
+	MSG_INPUT_PROMPT										db 			"Enter the next integer: "
+	MSG_INPUT_PROMPT_LEN								equ			$-MSG_INPUT_PROMPT	
 
-	MSG_RETURN_FROM_DISPLAY_ARRAY				db 			"Returned to manager.asm from calling display_array() function in another assembly-code file."
-	MSG_RETURN_FROM_DISPLAY_ARRAY_LEN		equ			$-MSG_RETURN_FROM_DISPLAY_ARRAY
+	MSG_INPUT_FEEDBACK									db 			"You entered: "
+	MSG_INPUT_FEEDBACK_LEN							equ			$-MSG_INPUT_FEEDBACK	
 
-	MSG_CALLING_REVERSE_ARRAY						db 			"Calling reverse_array() a C++ file."
-	MSG_CALLING_REVERSE_ARRAY_LEN				equ			$-MSG_CALLING_REVERSE_ARRAY	
+	MSG_INPUT_COMPLETE									db 			"You've entered nonsense. Assuming you are done!"
+	MSG_INPUT_COMPLETE_LEN							equ			$-MSG_INPUT_COMPLETE	
 
-	MSG_RETURN_FROM_REVERSE_ARRAY				db 			"Returned to manager.asm from calling reverse_array() function in a C++ code file."
-	MSG_RETURN_FROM_REVERSE_ARRAY_LEN		equ			$-MSG_RETURN_FROM_REVERSE_ARRAY		
+	MSG_INPUT_REVIEW										db 			"These numbers were received and placed into the array:"
+	MSG_INPUT_REVIEW_LEN								equ			$-MSG_INPUT_REVIEW	
 
-	MSG_GOOD_BYE												db 			"Leaving the_asm_file.asm.  Good bye!"
+	MSG_REVERSE_ARRAY_REVIEW						db 			"After the reverse function, these are the numbers of the array in their new order:"
+	MSG_REVERSE_ARRAY_REVIEW_LEN				equ			$-MSG_REVERSE_ARRAY_REVIEW
+
+	MSG_RESULT_REPORT_A									db			"You entered "
+	MSG_RESULT_REPORT_A_LEN							equ			$-MSG_RESULT_REPORT_A
+
+	MSG_RESULT_REPORT_B									db			"total numbers and their mean is "
+	MSG_RESULT_REPORT_B_LEN							equ			$-MSG_RESULT_REPORT_B
+
+	MSG_RESULT_REPORT_C									db			"."
+	MSG_RESULT_REPORT_C_LEN							equ			$-MSG_RESULT_REPORT_C
+
+	MSG_GOOD_BYE												db			"The mean will now be returned to the main function."
 	MSG_GOOD_BYE_LEN										equ			$-MSG_GOOD_BYE
 
-	; ---------------------------
-	; system calls
-	SYS_WRITE														equ			1
+	; ; ---------------------------
+	; ; system calls
+	; SYS_WRITE														equ			1
 
-	; ---------------------------
-	; file descriptors
-	FD_STDOUT														equ			1
+	; ; ---------------------------
+	; ; file descriptors
+	; FD_STDOUT														equ			1
 
 	; ---------------------------
 	; debug data
 	INT_VALUE														dq			100
 	INT_ARRAY 													dq 			10, 20, 30, 40, 50 
 	INT_ARRAY_LEN												equ			5	
+
+	;TODO: define a 64-bit integer array of unknown length
+
+; ----------------------------------------------------------
+; uninitialized-variable section
+; ----------------------------------------------------------
+section					.bss
 
 ; ----------------------------------------------------------
 ;  text section
@@ -52,18 +73,32 @@ section .text
 	extern reverse_array
 	extern print_string
 	extern print_newline	
+	extern libPuhfessorP_inputSignedInteger64
+	extern libPuhfessorP_printSignedInteger64
 
 	; ---------------------------
 	; int manager()
+	;
+	;	register usage:
+	;		r12: holds the sum value of the array
 	manager:
 
 		; ------------
-		; print greeting	
-    mov rdi, MSG_GREET 
-    mov rsi, MSG_GREET_LEN  
-    call print_string
-		call print_newline
+		; display the intro and instructions
+		call print_greeting
+		call print_instruction	
 
+		; ------------
+		; get the user input
+		call get_input
+		mov r12, rax
+
+		; ------------
+		; print return status from display_array()
+		mov rdi, MSG_INPUT_REVIEW 
+		mov rsi, MSG_INPUT_REVIEW_LEN 
+		call print_string
+		call print_newline
 
 		; ------------
 		; display the array
@@ -73,13 +108,21 @@ section .text
 		; ------------
 		; reverse the array
 		call reverse_array_routine
-	
+
 		; ------------
-		; print farewell	
-    mov rdi, MSG_GOOD_BYE 
-    mov rsi, MSG_GOOD_BYE_LEN  
+		; print status message before calling reverse_array()
+    mov rdi, MSG_REVERSE_ARRAY_REVIEW
+    mov rsi, MSG_REVERSE_ARRAY_REVIEW_LEN
     call print_string
-		call print_newline		
+		call print_newline	
+
+		; ------------
+		; display the array
+		call display_array_routine
+
+		; ------------
+		; print all of the fond farewells 
+		call print_good_bye	
 
 		; ------------
 		; set return value
@@ -87,15 +130,67 @@ section .text
 		ret
 
 	; ---------------------------
+	; void print_greeting(void)
+	;
+	; register usage: none
+	print_greeting:
+    mov rdi, MSG_GREET 
+    mov rsi, MSG_GREET_LEN  
+    call print_string
+		call print_newline
+		ret
+
+	; ---------------------------
+	; void print_instruction(void)
+	;
+	; register usage: none
+	print_instruction:
+		mov rdi, MSG_INPUT_INSTRUCTION
+		mov rsi, MSG_INPUT_INSTRUCTION_LEN
+		call print_string
+		call print_newline
+		ret			
+
+	; ---------------------------
+	; long_array get_input()
+	;
+	; register usage: 
+	get_input:
+
+		; ------------
+		; preserve		
+		; TODO: push registers here
+
+
+		;PSDEUDO CODE:
+			; zero out a counter to track the number of element is the array
+			; begin a user input loop with the following steps:
+				; call print_string using the MSG_INPUT_PROMPT string
+				; call the extern function libPuhfessorP_inputSignedInteger64() which captures the user input
+				; verify that the input was a number.  If it is:
+						; append it to the array defined in the .data section
+						; increment the counter
+						; call the print_string function sending the MSG_INPUT_FEEDBACK input string
+						; then call the libPuhfessorP_printSignedInteger64 function, printing the input value to the screen
+						; begin the input loop again
+				; if it's not a number, specifically the letter q:
+						; call print_string function with the MSG_INPUT_COMPLETE message
+						; end the loop and move on to the restore routine, popping registers
+
+
+		; ------------
+		; restore
+		; TODO: pop registers here		
+
+		ret
+
+
+
+	; ---------------------------
 	; void display_array_routine()
 	display_array_routine:
 
-		; ------------
-		; print status message before calling display_array()
-		mov rdi, MSG_CALLING_DISPLAY_ARRAY
-		mov rsi, MSG_CALLING_DISPLAY_ARRAY_LEN
-		call print_string
-		call print_newline
+
 
 		; ------------
 		; call the display_array function			
@@ -103,12 +198,7 @@ section .text
 		mov	rsi, INT_ARRAY_LEN
 		call display_array
 		
-		; ------------
-		; print return status from display_array()
-		mov rdi, MSG_RETURN_FROM_DISPLAY_ARRAY 
-		mov rsi, MSG_RETURN_FROM_DISPLAY_ARRAY_LEN 
-		call print_string
-		call print_newline
+
 
 		ret
 
@@ -116,12 +206,7 @@ section .text
 	; void reverse_array_routine()
 	reverse_array_routine:
 
-		; ------------
-		; print status message before calling reverse_array()
-    mov rdi, MSG_CALLING_REVERSE_ARRAY
-    mov rsi, MSG_CALLING_REVERSE_ARRAY_LEN
-    call print_string
-		call print_newline
+
 
 		; ------------
 		; call the reverse array method in c++ file	
@@ -137,3 +222,20 @@ section .text
 		call print_newline	
 
 		ret
+
+
+	; ---------------------------
+	; void print_instruction(void)
+	;
+	; register usage: none
+	print_good_bye:
+		mov rdi, MSG_RESULT_REPORT_A
+		mov rsi, MSG_RESULT_REPORT_A_LEN
+		call print_string
+		call print_newline
+
+		mov rdi, MSG_GOOD_BYE
+		mov rsi, MSG_GOOD_BYE_LEN
+		call print_string
+		call print_newline		
+		ret			
