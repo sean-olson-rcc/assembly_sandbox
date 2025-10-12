@@ -10,13 +10,6 @@ section					.data
 
 	; ---------------------------
 	; strings
-	MSG_GREET												db 			"In the display_array.asm code"
-	MSG_GREET_LEN										equ			$-MSG_GREET
-
-
-	MSG_GOOD_BYE										db 			"Leaving the display_array.asm code"
-	MSG_GOOD_BYE_LEN								equ			$-MSG_GOOD_BYE	
-
 	SEPARATOR												db			", "
 
 	; ---------------------------
@@ -66,19 +59,6 @@ section .text
 		; zero-out the counters 
 		xor rbx, rbx
 		xor	r8, r8  
-
-		; ------------
-		; print greeting	
-    mov rdi, MSG_GREET 
-    mov rsi, MSG_GREET_LEN  
-    call print_string
-		call print_newline
-
-		; ; ------------
-		; ; print test value
-		; mov	rdi, r13
-		; call libPuhfessorP_printSignedInteger64
-		; call print_newline
 
 		; ------------
 		; verify that the array is not empty
