@@ -53,6 +53,7 @@ section .text
 		; ------------
 		; preserve and stack align
 		push rbp
+		push rbx
 		push r12	
 		push r13
 
@@ -69,7 +70,7 @@ section .text
 		mov r13,	rsi
 
 		; ------------
-		; print greeting
+		; print test value
 		mov	rdi, [INT_VALUE]
 		call libPuhfessorP_printSignedInteger64
 		call print_newline
@@ -85,6 +86,7 @@ section .text
 		; restore and stack align
 		pop r13
 		pop r12	
+		pop rbx
 		pop rbp		
 
 		ret
