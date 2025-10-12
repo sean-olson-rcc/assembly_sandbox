@@ -245,6 +245,11 @@ section .text
 		mov rdi, INT_ARRAY
 		mov	rsi, INT_ARRAY_LEN
 		call display_array
+
+		; ------------
+		; print a blank line after the array		
+		call print_newline
+		call print_newline
 		
 		ret
 
@@ -269,7 +274,12 @@ section .text
     mov rdi, MSG_REVERSE_ARRAY_REVIEW
     mov rsi, MSG_REVERSE_ARRAY_REVIEW_LEN
     call print_string
-		call print_newline	
+
+
+		; ------------
+		; print a blank line after the array		
+		call print_newline
+		call print_newline
 
 		ret
 
