@@ -72,6 +72,7 @@ section .text
 		; print greeting
 		mov	rdi, [INT_VALUE]
 		call libPuhfessorP_printSignedInteger64
+		call print_newline
 
 		; ------------
 		; print goodbye	
