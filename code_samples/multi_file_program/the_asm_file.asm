@@ -14,8 +14,11 @@ section					.data
 	MSG_GREET_LEN										equ			$-MSG_GREET
 
 
-	MSG_CALLING_OTHER_ASM						db 			"Calling functions from other assembly code file"
+	MSG_CALLING_OTHER_ASM						db 			"Calling display_array() another assembly-code file."
 	MSG_CALLING_OTHER_ASM_LEN				equ			$-MSG_CALLING_OTHER_ASM	
+
+	MSG_RETURN_FROM_OTHER_ASM				db 			"Returned to the_asm_file.asm from calling display_array() function in another assembly-code file."
+	MSG_RETURN_FROM_OTHER_ASM_LEN		equ			$-MSG_RETURN_FROM_OTHER_ASM	
 
 
 	MSG_GOOD_BYE										db 			"Leaving the_asm_file.asm.  Good bye!"
@@ -59,11 +62,25 @@ section .text
 		call print_newline
 
 		; ------------
+		; print status message
+    mov rdi, MSG_CALLING_OTHER_ASM
+    mov rsi, MSG_CALLING_OTHER_ASM_LEN
+    call print_string
+		call print_newline		
+
+		; ------------
 		; call the display_array function			
 		mov rdi, INT_ARRAY
 		mov	rsi, INT_ARRAY_LEN
 		call display_array
-		
+
+		; ------------
+		; print greeting	
+    mov rdi, MSG_RETURN_FROM_OTHER_ASM 
+    mov rsi, MSG_RETURN_FROM_OTHER_ASM_LEN 
+    call print_string
+		call print_newline
+
 		; ------------
 		; print greeting	
     mov rdi, MSG_GOOD_BYE 
