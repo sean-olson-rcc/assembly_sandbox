@@ -47,7 +47,7 @@ section					.data
 section .text
 	global manager
 	extern display_array
-	extern reverse
+	extern reverse_array
 	extern print_string
 	extern print_newline	
 
@@ -82,7 +82,7 @@ section .text
     call print_string
 		call print_newline
 
-		call reverse
+		call reverse_array
 
 		; ------------
 		; print greeting	
