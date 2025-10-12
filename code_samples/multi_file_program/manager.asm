@@ -100,7 +100,7 @@ section .text
 		; ------------
 		; call the display_array function			
 		mov rdi, INT_ARRAY
-		mov	rsi, [INT_ARRAY_LEN]
+		mov	rsi, INT_ARRAY_LEN
 		call display_array
 		
 		; ------------
