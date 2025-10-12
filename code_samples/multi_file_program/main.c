@@ -10,7 +10,7 @@ int main(void) {
 
     long asm_a_value = int_from_asm_a(); // assign return value from assembly
 
-    printf("\back in main.c and we received this from the_asm_file.asm: %ld\n", asm_a_value);
+    printf("\nback in main.c and we received this from the_asm_file.asm: %ld\n", asm_a_value);
     printf("Main will return 0 to the operating system. Bye!\n");
 
     return 0;
