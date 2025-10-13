@@ -53,16 +53,19 @@ section					.data
 
 	; ---------------------------
 	; debug data
-	INT_VALUE														dq			100
-	INT_ARRAY 													dq 			10, 20, 30, 40, 50 
-	INT_ARRAY_LEN												equ			5	
-
-	;TODO: define a 64-bit integer array of unknown length
+	DEBUG_INT_VALUE														dq			100
+	DEBUG_INT_ARRAY 													dq 			10, 20, 30, 40, 50 
+	DEBUG_ INT_ARRAY_LEN											equ			5	
 
 ; ----------------------------------------------------------
 ; uninitialized-variable section
 ; ----------------------------------------------------------
 section					.bss
+
+	; ---------------------------
+	; data definitions for the user input: 100 64-bit integers maximum
+  INT_ARRAY       													resq 		100  
+  INT_ARRAY_MAX   													equ  		100 
 
 ; ----------------------------------------------------------
 ;  text section
@@ -80,7 +83,7 @@ section .text
 	; int manager()
 	;
 	;	register usage:
-	;		r12: holds the sum value of the array
+	;		r12: holds number of integers entered by the user
 	manager:
 
 		; ------------
@@ -95,6 +98,8 @@ section .text
 
 		; ------------
 		; display the array
+		mov	rdi, INT_ARRAY
+		mov	rsi, r12
 		call display_array_routine
 
 		; ------------
@@ -107,7 +112,7 @@ section .text
 
 		; ------------
 		; set return value
-		mov rax, [INT_VALUE]
+		mov rax, [DEBUG_INT_VALUE]
 		ret
 
 	; ---------------------------
@@ -136,33 +141,77 @@ section .text
 	; long_array get_input()
 	;
 	; register usage: 
+	;		r12: hold a constant used to check for non-numeric inputs
+	;		r14: is the input counter
 	get_user_input:
 
-		; ------------
-		; preserve		
-		; TODO: push registers here
+    ; ------------
+    ; preserve		
+    push rbp
+    push rbx
+    push r12
+    push r13
+    push r14
 
+    ; ------------
+    ; zero out a counter to track the number of elements in the array
+    xor r14, r14    ; r14 = 0 (element counter)
+    
+    ; ------------
+    ; set the	
+		mov r12, 0x8000000000000000		
 
-		;PSDEUDO CODE:
-			; zero out a counter to track the number of element is the array
-			; begin a user input loop with the following steps:
-				; call print_input_prompt
-				; call the extern function libPuhfessorP_inputSignedInteger64() which captures the user input
-				; verify that the input was a number.  If it is:
-						; append it to the array defined in the .data section
-						; increment the counter
-						; call the print_input_feedback function sending the value in the rdi register
-						; begin the input loop again
-				; if it's not a number, specifically the letter q:
+    ; ------------
+    ; begin the user input loop
+    get_user_input_loop:
+
+    		; ------------		
+        ; call print_input_prompt
+        call print_input_prompt
+
+        ; call the extern function to capture user input
+        call libPuhfessorP_inputSignedInteger64
+        
+    		; ------------					
+        ; verify that the input was a number using the special value: 0x8000000000000000
+        cmp rax, r12
+        je input_complete
+        
+    		; ------------					
+        ; if it is a valid number, append it to the array, store at array[r14]
+        mov [INT_ARRAY + r14*8], rax 
+        
+    		; ------------					
+        ; increment the counter
+        inc r14
+        
+    		; ------------					
+        ; call the print_input_feedback function, passing address of value just stored
+        lea rdi, [INT_ARRAY + r14*8 - 8] 
+        call print_input_feedback
+        
+    		; ------------					
+        ; begin the input loop again
+        jmp get_user_input_loop
+
+				input_complete:
+						; ------------	
 						; call print_input_complete_message
-						; end the loop and move on to the restore routine, popping registers
+						call print_input_complete_message
+						
+						; ------------							
+						; set return value (number of elements entered)
+						mov rax, r14
 
+    ; ------------
+    ; restore
+    pop r14
+    pop r13
+    pop r12
+    pop rbx
+    pop rbp
 
-		; ------------
-		; restore
-		; TODO: pop registers here		
-
-		ret
+    ret
 
 	; ---------------------------
 	; void print_input_prompt(void)
@@ -230,8 +279,22 @@ section .text
 		ret				
 
 	; ---------------------------
-	; void display_array_routine()
+	; void display_array_routine(int64 * arr, int64 length)
+	;
+	;	register usage:
+	;		r12: holds the array pointer
+	;		r13: holds the array length
 	display_array_routine:
+
+		; ------------
+		; preserve
+		push r12
+		push r13		
+
+		; ------------
+		; capture arguments
+		mov	r12,	rdi
+		mov	r13, 	rsi		
 
 		; ------------
 		; print return status from display_array()
@@ -242,20 +305,38 @@ section .text
 
 		; ------------
 		; call the display_array function			
-		mov rdi, INT_ARRAY
-		mov	rsi, INT_ARRAY_LEN
+		mov rdi, r12
+		mov	rsi, r13
 		call display_array
 
 		; ------------
 		; print a blank line after the array		
 		call print_newline
 		call print_newline
+
+		; ------------
+		; restore
+		pop r13
+		pop r12	
 		
 		ret
 
-	; ---------------------------
-	; void reverse_array_routine()
+	; void reverse_array_routine(int64 * arr, int64 length)
+	;
+	;	register usage:
+	;		r12: holds the array pointer
+	;		r13: holds the array length
 	reverse_array_routine:
+
+		; ------------
+		; preserve
+		push r12
+		push r13		
+
+		; ------------
+		; capture arguments
+		mov	r12,	rdi
+		mov	r13, 	rsi		
 
 		; ------------
 		; print status message before calling reverse_array()
@@ -266,14 +347,14 @@ section .text
 
 		; ------------
 		; call the reverse array method in c++ file	
-		mov	rdi,	INT_ARRAY
-		mov	rsi,	INT_ARRAY_LEN
+		mov	rdi,	r12
+		mov	rsi,	r13
 		call reverse_array
 
 		; ------------
 		; call the display_array function			
-		mov rdi, INT_ARRAY
-		mov	rsi, INT_ARRAY_LEN
+		mov	rdi,	r12
+		mov	rsi,	r13
 		call display_array
 		
 		; ------------
@@ -281,8 +362,12 @@ section .text
 		call print_newline
 		call print_newline
 
-		ret
+		; ------------
+		; restore
+		pop r13
+		pop r12			
 
+		ret
 
 	; ---------------------------
 	; void print_instruction(void)
