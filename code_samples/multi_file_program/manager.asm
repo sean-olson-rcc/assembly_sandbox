@@ -258,6 +258,12 @@ section .text
 	reverse_array_routine:
 
 		; ------------
+		; print status message before calling reverse_array()
+    mov rdi, MSG_REVERSE_ARRAY_REVIEW
+    mov rsi, MSG_REVERSE_ARRAY_REVIEW_LEN
+    call print_string
+
+		; ------------
 		; call the reverse array method in c++ file	
 		mov	rdi,	INT_ARRAY
 		mov	rsi,	INT_ARRAY_LEN
@@ -269,13 +275,6 @@ section .text
 		mov	rsi, INT_ARRAY_LEN
 		call display_array
 		
-		; ------------
-		; print status message before calling reverse_array()
-    mov rdi, MSG_REVERSE_ARRAY_REVIEW
-    mov rsi, MSG_REVERSE_ARRAY_REVIEW_LEN
-    call print_string
-
-
 		; ------------
 		; print a blank line after the array		
 		call print_newline
