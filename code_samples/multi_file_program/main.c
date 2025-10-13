@@ -1,4 +1,4 @@
-#include <stdint.h> // for int64_t if you want explicit size
+#include <stdint.h>
 #include <stdio.h>
 
 // external function in the
