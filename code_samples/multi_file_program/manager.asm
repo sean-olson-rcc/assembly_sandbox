@@ -262,6 +262,7 @@ section .text
     mov rdi, MSG_REVERSE_ARRAY_REVIEW
     mov rsi, MSG_REVERSE_ARRAY_REVIEW_LEN
     call print_string
+		call print_newline
 
 		; ------------
 		; call the reverse array method in c++ file	
