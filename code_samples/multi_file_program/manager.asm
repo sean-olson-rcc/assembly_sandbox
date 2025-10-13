@@ -95,6 +95,8 @@ section .text
 
 		; ------------
 		; reverse the array
+		mov	rdi, INT_ARRAY
+		mov	rsi, r12		
 		call reverse_array_routine
 
 		; ------------
@@ -212,7 +214,7 @@ section .text
 		mov rdi, MSG_INPUT_PROMPT
 		mov rsi, MSG_INPUT_PROMPT_LEN
 		call print_string
-		call print_newline
+
 		ret		
 
 	; ---------------------------
