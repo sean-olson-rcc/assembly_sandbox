@@ -90,7 +90,7 @@ section .text
 
 		; ------------
 		; get the user input
-		call get_input
+		call get_user_input
 		mov r12, rax
 
 		; ------------
@@ -136,7 +136,7 @@ section .text
 	; long_array get_input()
 	;
 	; register usage: 
-	get_input:
+	get_user_input:
 
 		; ------------
 		; preserve		
