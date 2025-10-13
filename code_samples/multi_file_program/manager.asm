@@ -291,6 +291,7 @@ section .text
 
 		; ------------
 		; print return status from display_array()
+		call print_newline
 		mov rdi, MSG_INPUT_REVIEW 
 		mov rsi, MSG_INPUT_REVIEW_LEN 
 		call print_string
