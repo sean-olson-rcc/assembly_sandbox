@@ -43,19 +43,10 @@ section					.data
 	MSG_GOOD_BYE												db			"The mean will now be returned to the main function."
 	MSG_GOOD_BYE_LEN										equ			$-MSG_GOOD_BYE
 
-	; ; ---------------------------
-	; ; system calls
-	; SYS_WRITE														equ			1
-
-	; ; ---------------------------
-	; ; file descriptors
-	; FD_STDOUT														equ			1
-
 	; ---------------------------
 	; debug data
-	DEBUG_INT_VALUE														dq			100
-	DEBUG_INT_ARRAY 													dq 			10, 20, 30, 40, 50 
-	DEBUG_ INT_ARRAY_LEN											equ			5	
+	DEBUG_INT_VALUE												dq			100
+
 
 ; ----------------------------------------------------------
 ; uninitialized-variable section
