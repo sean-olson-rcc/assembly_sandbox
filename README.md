@@ -69,4 +69,4 @@ Each platform-specific Makefile includes:
 - **Correct linker**: `ld` (Linux), `clang` (macOS), `link` (Windows)
 - **Binary naming**: Platform-specific output names (`main_l`, `main_m`, `main_w.exe`)
 
-The `mk.sh` script automatically detects the operating system and invokes the correct Makefile, simplifying cross-platform development workflows.
+The `mk.sh` script automatically detects the operating system and invokes the correct Makefile, simplifying cross-platform development workflows.  Thanks.
