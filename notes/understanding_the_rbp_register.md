@@ -63,7 +63,9 @@ The **RBP** register is essential for managing function stack frames, allowing f
 
 
 ---
+
 Let me confirm that I understand what you are saying.  In this code sample you are storing 32-bit integers in the stack as local variables, and you've allocated space for 5 total values.  When the function is called the rsp appears to be pointing to the bottom of the stack, which is in-turn saved in the rbp register.   By then subtracting 20 from the rsp, that leaves 20 addresses open for storage.  So, can we think of the base as the highest address number -- the highest is at the bottom and the addresses decrease moving up the stack?  Is that correct?
+
 ---
 
 Your understanding is mostly correct, but let's clarify and refine a few points regarding how the stack works, especially in relation to the **RBP** and **RSP** registers.
