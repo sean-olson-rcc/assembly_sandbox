@@ -116,3 +116,37 @@ Here's a way to visualize the stack layout before and after the allocation:
 - **Correct**: As you allocate (subtract) from `RSP`, the addresses lower themselves, remaining top (new RSP) to be the highest (pointing at lower addresses).
 
 So, to summarize, you can indeed think of the base as the reference point from which you access your local variables and parameters, and the addresses decrease (higher to lower) as you allocate space in the stack.
+
+---
+
+I'd like to go through this, point-by-point to ensure I fully understand all the related concepts:
+
+You say "When a function is called, a new stack frame is created. The RBP register is used to establish this frame by pointing to the base of the current stack frame."  I take this to mean two things: first, the new stack frame established for the called function is a fixed size, and the RBP register points to the "base" or highest address within that range of allocated addresses, i.e., the upper limit of addresses available to the called function that the base la range of addresses on the stack are reserved for the called functions dedicated use; second; within the context of the called function, the RSP initially points at that same highest memory address of allocated stack space.  Saving the old RBP address, which represents the base if the calling function's stack frame, and moving the RSP to the RBP register, sets the RBP register to reference the base of the stack frame allocated to the called function.  Essentially it's a dividing line between the stack memory allocated to calling and called functions  Am I correct?
+
+---
+
+Your understanding is quite strong, and you’re on the right track in breaking this down. Let’s clarify and confirm your points one by one for a clearer comprehension of stack frames, `RBP`, and `RSP`.
+
+### Understanding Stack Frames and Registers
+
+1. **Stack Frame Creation**:
+   - **Correct**: When a function is called, a new stack frame is created for that function. This stack frame is typically of fixed size, determined by the local variables and any parameters passed to the function.
+   - The `RBP` register points to the **base** of this new stack frame, which designates the **highest address** within the allocated space that the function can use.
+
+2. **RBP and RSP Relationship**:
+   - **Correct**: At the beginning of the function, `RSP` points to the upper limit of the newly allocated stack space. This upper limit is where the last allocated item on the stack is located.
+   - When the function begins execution, saving the old `RBP` address is an important step. This old address represents the base of the previous function's stack frame.
+
+3. **Setting the New Base**:
+   - **Correct**: After saving the old `RBP`, the next step is to set `RBP` to the current value of `RSP`:
+     - This action indeed establishes a new base for the called function's stack frame.
+     - Essentially, it creates a boundary or “dividing line” between the stack memory allocated to the calling function and that reserved for the called function.
+
+### Summary of Your Points
+
+1. **New Stack Frame**: You understand that each function call results in a new stack frame that is fixed in size for local variables and parameters.
+2. **RBP as Base Pointer**: You recognize that `RBP` points to the highest address (base) of the allocated stack space for the called function.
+3. **Initial RSP Pointing**: You’ve rightly noted that `RSP` starts at the same highest memory address as `RBP`.
+4. **Old RBP Saving**: You’ve understood the significance of saving the old `RBP`, which serves as a reference back to the previous stack frame when the function exits.
+
+These concepts are foundational in understanding how function calls and stack management work in assembly language and many high-level languages that compile down to machine code. Your breakdown is logically connected, and you're accurately grasping how stack frames define function scope and memory allocation. Great job! If you have further inquiries or wish to keep dissecting this topic, feel free to ask!
