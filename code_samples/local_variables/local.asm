@@ -13,6 +13,8 @@ section .data
 MSG_INTRO               db      "Hello! I am Sean Olson, speaking to you from the local.asm code file.", 13, 10
 MSG_INTRO_LEN           equ     $-MSG_INTRO
 
+MSG_PRINT_NUMBER:       db      "The value at index %ld is %ld", 13, 10, 0
+
 ;-------------------
 ; note: printf won't flush unless the string contains a newline
 PRINTF_LONG             db      "%lu", 13, 10, 0
@@ -23,7 +25,7 @@ CRLF_LEN                equ     $-CRLF
 ;-------------------
 ; definitions
 
-NUM_INTEGERS            equ     50
+NUM_INTEGERS            equ     51
 INTEGER_SIZE            equ     8
 INTEGER_START_VALUE     equ     7
 
@@ -121,48 +123,87 @@ demo:
   ;---------
   ; demo loop initialization
 
-  demo_loop_init:
-
     ;---------
-    ; initialize the moving pointer and the start value
+    ; initialize the moving pointer and the start value for the initialization loop
 
     mov r14, r12
     mov r15,  INTEGER_START_VALUE
     
   ;---------
-  ; demo loop top
+  ; demo loop init body
 
-  demo_loop_top:
+  demo_loop_init_body:
 
     ;---------
     ; check for end of array
 
     cmp r14,  r13
-    jg  demo_loop_done
+    jg  demo_loop_init_done
 
     ;---------
-    ; check for end of array
+    ; assign the value from r15 to the selected element in the array, addressed in r14
 
     mov [r14], r15
     inc r15
-
-  ;---------
-  ; demo loop bottom -- nothing needed it just functions as a marker
-
-  demo_loop_bottom:
 
     ;---------
     ; advance to the next address in the array
 
     add r14, INTEGER_SIZE
-    jmp demo_loop_top       
+    jmp demo_loop_init_body      
 
   ;---------
-  ; demo loop done
+  ; demo loop init done
 
-  demo_loop_done:
+  demo_loop_init_done:
 
+;---------
+  ; demo loop print
 
+    ;---------
+    ; initialize the moving pointer and the start value for the print loop
+
+    mov r14, r12
+    mov r15,  INTEGER_START_VALUE
+
+    mov rcx, 0
+
+  ;---------
+  ; demo loop print body
+
+  demo_loop_print_body:
+
+    ;---------
+    ; check for end of array
+
+    cmp r14,  r13
+    jg  demo_loop_print_done
+
+    ;---------
+    ; align the stack and call printf to output the number
+
+    mov rdi, MSG_PRINT_NUMBER 
+    mov rsi, rcx
+    mov rdx, r15
+
+    ; push r12
+    and rsp, -16
+    call printf
+    ; pop r12
+
+    inc r15
+    inc rcx
+
+    ;---------
+    ; advance to the next address in the array
+
+    add r14, INTEGER_SIZE
+    jmp demo_loop_print_body      
+
+  ;---------
+  ; demo loop print done
+
+  demo_loop_print_done:
 
 
   ;---------
