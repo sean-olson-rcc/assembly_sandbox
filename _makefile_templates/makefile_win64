@@ -1,3 +1,5 @@
+# Derived from makefile demo by Michael Peralta
+
 define say
 	$(info [Windows Makefile Template] $1)
 endef
@@ -17,7 +19,6 @@ BIN := ./$(BIN_NAME).exe
 #
 default:	help
 .PHONY: default
-
 
 help:
 	@echo "***** Makefile Menu *****"

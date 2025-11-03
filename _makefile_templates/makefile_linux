@@ -1,3 +1,5 @@
+# Derived from makefile demo by Michael Peralta
+
 define say
 	$(info [Linux Makefile Template] $1)
 endef
