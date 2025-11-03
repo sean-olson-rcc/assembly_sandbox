@@ -64,7 +64,7 @@ main:
 
 	mov	rdi,	MSG_BEGIN_PRINTING
 	mov	rsi,	FD_STDOUT
-	call	printNullTerminatedString
+	call	print_null_terminated_string
 	call	crlf
 
 	;--------------	
@@ -91,7 +91,7 @@ main:
 		; print the referenced argument and move the cursor to the next line
 		mov	rdi,	[r15]
 		mov	rsi,	FD_STDOUT
-		call printNullTerminatedString
+		call print_null_terminated_string
 		call crlf
 		
 		;--------------
@@ -132,7 +132,7 @@ main:
 intro:
 	mov	rdi,	MSG_INTRO
 	mov	rsi,	FD_STDOUT
-	call	printNullTerminatedString
+	call	print_null_terminated_string
 	call crlf
 
 	ret
@@ -153,37 +153,57 @@ crlf:
 goodbye:
 	mov	rdi,	MSG_GOODBYE
 	mov	rsi,	FD_STDOUT
-	call	printNullTerminatedString
+	call	print_null_terminated_string
 	call crlf
 
 	ret	
 
 
 ;-----------------------------
-;	void printNullTerminatedString(char * cstring, long file_handle)
+;	void print_null_terminated_string(char * cstring, long file_handle)
 ;
 ;		register usage:
 ;			r12: 	csrting pointer
 ;			r13: 	file handle
+;			r14: 	cstring's length
 
-printNullTerminatedString:
+print_null_terminated_string:
 
 	;--------------	
 	; preserve
 	push r12
 	push r13
+	push r14
 
+	;--------------	
+	; assign incoming arguments to r12 and r13 registers
+	mov	r12,	rdi 	; rdi is pointer to the first address of the character-address array
+	mov	r13,	rsi		; rsi is the file descriptor used for output
+
+	;--------------	
+	; use strlen to calculate the length of the string and assign the result to r14
+	mov	rdi, 	r12
+	call strlen
+	mov	r14, rax
+
+	;--------------	
+	; use an assembly system call to write the string
+	mov	rax, 	SYS_WRITE
+	mov	rdi,	r13
+	mov	rsi,	r12
+	mov	rdx,	r14
+	syscall	
 
 	;--------------	
 	; restore
+	pop r14
 	pop r13
 	pop r12
 
 	ret
 
-
 ;-----------------------------
-;	void strlen(char * cstring, long file_handle)
+;	long strlen(char * cstring)
 ;
 ;		register usage:
 ;			r12: 	running pointer
@@ -209,19 +229,16 @@ strlen:
 		cmp byte [r12], 0		; check the character at the address referenced in the r12 register
 		je strlen_loop_done	; if you have found a 0 (i.e., null), then the string is terminated 	
 
-
-
 	strlen_loop_body:
-
-
+		inc r13
+		inc r12
+		jmp strlen_loop_top
 
 	strlen_loop_done:	
-
+		mov rax, r13
 	;--------------	
 	; restore
 	pop r13
 	pop r12
 
 	ret
-
-
