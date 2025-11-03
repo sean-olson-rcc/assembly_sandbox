@@ -1,18 +1,4 @@
-# Assembly Programming Sandbox
-
-A collection of x86-64 assembly language programs designed as a learning environment and code reference repository. This sandbox provides cross-platform build support for Linux, macOS, and Windows, along with educational examples and debugging tools for assembly programming practice.
-
-## Table of Contents
-
-| Directory/File | Description |
-|---------------|-------------|
-| [`_makefile_templates/`](./_makefile_templates/) | Platform-specific Makefile templates and build automation scripts |
-| [`notes/`](./notes/) | Reference documentation and assembly programming guides |
-| [`notes/register_usage.md`](./notes/register_usage.md) | Comprehensive x86-64 register reference and calling conventions |
-| [`LICENSE`](./LICENSE) | Project license information |
-
-
-## Makefile Templates
+# Makefile Templates
 
 The `_makefile_templates/` directory contains platform-specific Makefile templates and a cross-platform build automation script for simplified project setup.
 
