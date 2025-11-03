@@ -135,8 +135,10 @@ strlen:
 	; strlen loop top	
 	strlen_loop_top:
 
-		cmp byte [r12], 0		; check the character at the address referenced in the r12 register
-		je strlen_loop_done	; if you have found a 0 (i.e., null), then the string is terminated 	
+		cmp byte [r12], 0			; check the character at the address referenced in the r12 register
+		jne strlen_loop_body	; if you have not found a 0 (i.e., null), then the string is not terminated (conditional jumps range is only 128 bytes)	
+
+		jmp strlen_loop_done 	; this structure shortens the distance fot the conditinal jump
 
 	strlen_loop_body:
 		inc r13
