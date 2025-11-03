@@ -35,14 +35,16 @@ section .text
 
 ;------------------------
 ; global exports and imports
+; because this is a pure assembly program linking the 
+; gcc libraries, it needs to have a entry point named main
 
-global _start
+global main
 
 extern  print_message
 extern print_newline
 extern print_signed_int_64
 
-_start:
+main:
 
   mov rdi,  MSG_TEST
   mov rsi,  MSG_TEST_LEN
