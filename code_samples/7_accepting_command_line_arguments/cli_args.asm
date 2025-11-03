@@ -1,6 +1,6 @@
 ;------------------------------------------------------------
 ; name: cli_args.asm
-; attribution: copied from code-along with RCC Professor Michael Peralta
+; attribution: copied from code-review with RCC Professor Michael Peralta
 ; date: 11/3/2025
 ;------------------------------------------------------------
 
