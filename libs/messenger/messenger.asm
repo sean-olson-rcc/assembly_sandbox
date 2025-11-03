@@ -34,8 +34,6 @@ section .text
 	global print_newline
 	global print_signed_int_64
 
-	extern libPuhfessorP_printSignedInteger64
-
 ; ---------------------------
 	; void print_message(char * message, int length)
 	;
@@ -102,7 +100,7 @@ section .text
 		; set the arguments and make the syscall			
 		mov rdi, r8
 		add rsp, -16
-		call libPuhfessorP_printSignedInteger64
+
 
 		; ------------
 		; restore - none

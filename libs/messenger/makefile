@@ -2,10 +2,13 @@ define say
 	$(info [Messenger Library] $1)
 endef
 
-#
-ASM := yasm
-YASM_FLAGS := -f elf64 -g dwarf2
-LINK_FLAGS := -g
+# assembler and flags
+ASM 			:= 	yasm
+ASM_FLAGS := 	-f elf64 -g dwarf2
+
+# linker and flags
+LINKER				:=	g++
+LINKER_FLAGS 	:= -Wall -m64	-gdwarf-2	-no-pie	-z noexecstack
 
 #
 REPO_PATH := $(abspath .)
@@ -57,15 +60,15 @@ clean:
 
 #
 $(BIN):	main.o messenger.o 
-	ld $(LINK_FLAGS) *.o *.so -o $(BIN)
+	$(LINKER) $(LINKER_FLAGS) *.o -o $(BIN)
 
 #
 main.o:	main.asm
-	$(ASM) $(YASM_FLAGS) $< -o "$@"	
+	$(ASM) $(ASM_FLAGS) $< -o "$@"	
 
 #
 messenger.o:	messenger.asm
-	$(ASM) $(YASM_FLAGS) $< -o "$@"		
+	$(ASM) $(ASM_FLAGS) $< -o "$@"		
 
 
 
