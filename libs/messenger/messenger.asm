@@ -99,7 +99,7 @@ section .text
 		; ------------
 		; set the arguments and make the syscall			
 		mov rdi, r8
-		add rsp, -16
+		; add rsp, -16
 
 
 		; ------------
