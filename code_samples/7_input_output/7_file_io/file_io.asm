@@ -85,7 +85,7 @@ file_io:
 
 	call welcome
 	call file_tests
-s
+
 	ret
 
 

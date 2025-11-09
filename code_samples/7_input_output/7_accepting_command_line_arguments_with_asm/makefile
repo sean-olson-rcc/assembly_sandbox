@@ -1,7 +1,7 @@
 # Derived from makefile demo by Michael Peralta
 
 define speak
-	$(info [Command-Line Arguments] $1)
+	$(info [Command-Line Arguments with ASM] $1)
 endef
 
 # assembler flags
@@ -10,11 +10,11 @@ ASM_FLAGS 	:= 	-f elf64	-gdwarf2 -Werror
 
 #	linker flags
 # Using GCC libraries make reading in CLI args easier
-LINKER				:=	g++
-LINKER_FLAGS	:=	-Wall	-m64	-gdwarf2	-no-pie	-z noexecstack
+LINKER				:=	ld
+LINKER_FLAGS	:=	-g --fatal-warnings
 
 #	executable name
-BIN_NAME:			:=	main
+BIN_NAME			:=	main
 BIN 					:= ./$(BIN_NAME)
 
 #	file containing gdb commands
@@ -62,12 +62,12 @@ clean:
 .PHONY: clean
 
 # build the main executable (binary)
-$(BIN):	cli_args.o
+$(BIN):	main.o
 	$(call speak, Linking the executabe: $@)
 	$(LINKER) $(LINKER_FLAGS) *.o -o $(BIN)
 
 # compile the pure-assembly module
-cli_args.o:	cli_args.asm
+main.o:	main.asm
 	$(call speak, Assembling $@)
 	$(ASM) $(ASM_FLAGS) $< -o "$@"	
 

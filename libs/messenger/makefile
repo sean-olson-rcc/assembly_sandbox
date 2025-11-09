@@ -6,9 +6,12 @@ endef
 ASM 			:= 	yasm
 ASM_FLAGS := 	-f elf64 -g dwarf2
 
+CC				:= gcc
+LIB_FLAGS	:= -shared
+
 # linker and flags
-LINKER				:=	g++
-LINKER_FLAGS 	:= -Wall -m64	-gdwarf-2	-no-pie	-z noexecstack
+LINKER				:=	gcc
+LINKER_FLAGS 	:= -Wall -m64	-gdwarf-2	-no-pie	-z noexecstack -lc
 
 #
 REPO_PATH := $(abspath .)
@@ -58,17 +61,21 @@ clean:
 	-rm $(BIN)
 .PHONY: clean
 
-#
+# link the main object file with the messanger shared-object file
 $(BIN):	main.o messenger.o 
-	$(LINKER) $(LINKER_FLAGS) *.o -o $(BIN)
+	$(LINKER) $(LINKER_FLAGS) messenger.o main.o -o $(BIN)
 
-#
+# create the shared object library
+# messenger.so: messenger.o
+# 	$(CC) $(LIB_FLAGS) messenger.o -o messenger.so
+
+# compile the main driver
 main.o:	main.asm
-	$(ASM) $(ASM_FLAGS) $< -o "$@"	
+	$(ASM) $(ASM_FLAGS) main.asm -o main.o	
 
-#
+# compile the messanger library code
 messenger.o:	messenger.asm
-	$(ASM) $(ASM_FLAGS) $< -o "$@"		
+	$(ASM) $(ASM_FLAGS) messenger.asm -o messenger.o		
 
 
 

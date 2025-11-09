@@ -11,10 +11,10 @@
 section .data
 
 ;-------------------------
-; string constants
+; c-strings
 
-MSG_TEST                  db        "Hello world! This is the messenger library, ready to work.", 13, 10
-MSG_TEST_LEN              equ       $-MSG_TEST
+MSG_PRINT_STRING_DEMO                 db        "This is a demo of the print_string() function on the messanger library", 13, 0
+
 
 ;-------------------------
 ; integer constants
@@ -40,22 +40,24 @@ section .text
 
 global main
 
-extern  print_message
+extern print_simple_string
 extern print_newline
 extern print_signed_int_64
 
 main:
 
-  mov rdi,  MSG_TEST
-  mov rsi,  MSG_TEST_LEN
-  call print_message
+  mov rdi,  MSG_PRINT_STRING_DEMO
+  call print_simple_string
 
   call print_newline
-
-  mov rdi,  DEBUG_INT
-  call print_signed_int_64
-
   call print_newline
+  call print_newline
+  call print_newline
+
+  ; mov rdi,  DEBUG_INT
+  ; call print_signed_int_64
+
+  ; call print_newline
 
   mov rax,  SYS_EXIT
   mov rdi,  EXIT_SUCCESS

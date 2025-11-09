@@ -17,6 +17,9 @@ section					.data
 	MSG_CRLF_LEN										equ			$-MSG_CRLF
 
 
+	MSG_DEMO_STRING									db			"This is a test", 10, 0
+
+
 	; ---------------------------
 	; system calls
 	SYS_WRITE												equ			1
@@ -30,36 +33,42 @@ section					.data
 ;  text section
 ; ----------------------------------------------------------
 section .text
-	global print_message
+	global print_simple_string
 	global print_newline
 	global print_signed_int_64
 
+
+	extern printf
+
 ; ---------------------------
-	; void print_message(char * message, int length)
+	; void print_string(char * message)
 	;
 	;	register usage
-	;		r8:	string to be printed
-	;		r9:	string length
-	print_message:		
+	;		rbp:	the base pointer is preserved
+	;		rsp: the stack pointer is moved to accomodate 16-byte alignment
+
+	print_simple_string:		
 
 		; ------------
-		; preserve - none
+		; preserve
+		push rbp
+		mov rbp, rsp
 
 		; ------------
-		; grab the arguments	
+		; grab the argument	
 		mov r8,	rdi
-		mov	r9,	rsi
-		
+
+		and rsp, -16
+
+		mov rdi,	MSG_DEMO_STRING
 		; ------------
 		; set the arguments and make the syscall			
-		mov rax,	SYS_WRITE
-		mov	rdi,	FD_STDOUT
-		mov	rsi,	r8
-		mov	rdx,	r9
-		syscall
+		call printf
 
 		; ------------
-		; restore - none
+		; restore
+		mov rsp, rbp
+		pop rbp
 
 		ret
 
