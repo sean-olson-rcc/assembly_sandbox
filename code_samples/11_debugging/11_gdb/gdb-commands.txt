@@ -1,0 +1,7 @@
+break main.asm: 50
+break messenger.asm: 66
+
+info breakpoints
+
+
+run
