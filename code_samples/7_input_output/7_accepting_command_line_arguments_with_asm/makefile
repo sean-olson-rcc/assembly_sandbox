@@ -1,4 +1,7 @@
-# Derived from makefile demo by Michael Peralta
+# ------------------------------------------------------------
+# about: derived from makefile developed and demonstrated by Professor Michael Peralta
+# date:	11/20/2025
+# ------------------------------------------------------------
 
 define speak
 	$(info [Command-Line Arguments with ASM] $1)

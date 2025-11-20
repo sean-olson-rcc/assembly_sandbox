@@ -1,5 +1,11 @@
-define say
-	$(info [Messenger Library] $1)
+# ------------------------------------------------------------
+# about: derived from makefile developed and demonstrated by Professor Michael Peralta
+# date:	11/20/2025
+# ------------------------------------------------------------
+
+
+define speak
+	$(info [YASM Utility Library] $1)
 endef
 
 # assembler and flags
@@ -62,20 +68,20 @@ clean:
 .PHONY: clean
 
 # link the main object file with the messanger shared-object file
-$(BIN):	main.o messenger.o 
-	$(LINKER) $(LINKER_FLAGS) messenger.o main.o -o $(BIN)
+$(BIN):	main.o yasm_util.o 
+	$(LINKER) $(LINKER_FLAGS) yasm_util.so main.o -o $(BIN)
 
 # create the shared object library
-# messenger.so: messenger.o
-# 	$(CC) $(LIB_FLAGS) messenger.o -o messenger.so
+yasm_util.so: yasm_util.o
+	$(CC) $(LIB_FLAGS) yasm_util.o -o yasm_util.so
 
 # compile the main driver
 main.o:	main.asm
 	$(ASM) $(ASM_FLAGS) main.asm -o main.o	
 
 # compile the messanger library code
-messenger.o:	messenger.asm
-	$(ASM) $(ASM_FLAGS) messenger.asm -o messenger.o		
+yasm_util.o:	yasm_util.asm
+	$(ASM) $(ASM_FLAGS) yasm_util.asm -o yasm_util.so		
 
 
 

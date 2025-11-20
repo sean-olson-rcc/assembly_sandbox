@@ -1,3 +1,8 @@
+# ------------------------------------------------------------
+# about: derived from makefile developed and demonstrated by Professor Michael Peralta
+# date:	11/20/2025
+# ------------------------------------------------------------
+
 define say
 	$(info [Find the Largest Number] $1)
 endef

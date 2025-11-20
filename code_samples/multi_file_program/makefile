@@ -9,8 +9,7 @@ ASM := yasm
 CPP_FLAGS := -c
 C_FLAGS := -c -Wall -gdwarf-2 -m64 -no-pie
 YASM_FLAGS := -f elf64 -g dwarf2 -Werror
-LINK_FLAGS := -Wall -gdwarf-2 -m64 -Werror -no-pie -z noexecstack
-
+LINK_FLAGS := -Wall -gdwarf-2 -m64 -Werror -z noexecstack
 
 #
 REPO_PATH := $(abspath .)
@@ -52,12 +51,6 @@ build:	$(BIN)
 run:	build
 	$(BIN)
 .PHONY: run
-
-
-# #
-# gradescope:
-# 	multirepo-blackbox-grader --config "$(REPO_PATH)/grader.yml" --repo "$(REPO_PATH)"
-# .PHONY: gradescope
 
 #
 debug:	build
