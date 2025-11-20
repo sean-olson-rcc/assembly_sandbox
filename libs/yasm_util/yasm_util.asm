@@ -37,7 +37,6 @@ section .text
 	global print_newline
 	global print_signed_int_64
 
-
 	extern printf
 
 ; ---------------------------
