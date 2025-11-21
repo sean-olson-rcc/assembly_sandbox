@@ -17,7 +17,7 @@ TEST_STRING                           db        "This is a test of the print_str
 TEST_FLOAT_FORMAT                     db        "This is value, %.2f, represents Pi, rounded to two decimal places.",0
 
 TEST_STRING_INPUT_TEMPLATE            db        "Please enter your name: ",0
-TEST_STRING_OUTPUT_TEMPLATE           db        "Yes.  Your name is %s",0
+TEST_STRING_OUTPUT_TEMPLATE           db        "Thanks, %s",0
 
 
 TEST_INTEGER_INPUT_TEMPLATE           db        "Please enter your birth year: ",0
@@ -146,3 +146,6 @@ test_input_functions:
   call print_newline
 
   ret
+
+
+section .note.GNU-stack noalloc noexec nowrite progbits  
