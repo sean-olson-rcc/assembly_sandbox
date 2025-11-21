@@ -13,6 +13,28 @@ The `yasm_util.so` shared library wraps standard C library functions (`printf`, 
 - **Buffer Management**: Automatic output flushing for interactive prompts
 - **Stack Safety**: All functions maintain 16-byte stack alignment required by System V AMD64 ABI
 
+
+### Important Notes
+
+1. **Entry Point**: When linking with `gcc`, your entry point must be named `main`, not `_start`.
+2. **Stack Alignment**: The library handles stack alignment internally, but ensure your code maintains alignment before calling library functions.
+3. **External Declarations**: Always declare library functions as extern before using them:
+
+```
+  extern print_cstring
+  extern print_long
+  extern get_string_input
+```	
+
+4. **Null Terminators**: String arguments to print_cstring must be null-terminated (ending with `0`).
+5. **Buffer Sizes**: When using `get_string_input`, ensure your buffer is large enough and pass the correct size.
+6. **Float Arguments**: Float printing functions expect pointers to 64-bit doubles, not the values themselves.
+7. **Stack Safety**: Add this section to your assembly files to prevent executable stack warnings:
+
+```
+  section .note.GNU-stack noalloc noexec nowrite progbits
+```
+
 ---
 
 ## API Reference
