@@ -79,7 +79,7 @@ yasm_util.so: yasm_util.o
 main.o:	main.asm
 	$(ASM) $(ASM_FLAGS) main.asm -o main.o	
 
-# compile the messanger library code
+# compile the yasm_util library code
 yasm_util.o:	yasm_util.asm
 	$(ASM) $(ASM_FLAGS) yasm_util.asm -o yasm_util.so		
 
