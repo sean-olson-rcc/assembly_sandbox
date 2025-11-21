@@ -194,6 +194,7 @@ void get_int64_input(long *destination)
 ## License and Credits
 
 **Author:** Sean Olson; the makefile taken from a pattern developed by Professor Michael Peralta
+
 **Description:** A simple library to use C functions in YASM x86-64 Ubuntu
 
 Feel free to use and modify this library for educational purposes.
