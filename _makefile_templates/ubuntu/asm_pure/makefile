@@ -89,4 +89,4 @@ $(BIN): $(OBJECTS)
 
 # assemble assembly code files, creating object files
 %.o: %.asm
-	$(ASM) $(ASM_FLAGS) $< -o $@
+	$(ASM) $(ASM_FLAGS) -l $*.lst $< -o $@

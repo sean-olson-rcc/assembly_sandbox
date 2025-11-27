@@ -5,7 +5,7 @@
 # by: Sean Olson
 # ------------------------------------------------------------
 
-#print a blank line to create some seperation
+#print a blank line to create some separation
 $(info )
 
 define output

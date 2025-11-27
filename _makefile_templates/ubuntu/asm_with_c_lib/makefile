@@ -5,7 +5,7 @@
 # by: Sean Olson
 # ------------------------------------------------------------
 
-#print a blank line to create some seperation
+# print a blank line to create some separation
 $(info )
 
 define output
@@ -17,20 +17,29 @@ endef
 ROOT_PATH := $(abspath .)
 $(call output, ROOT_PATH: $(ROOT_PATH))
 
-# compilers and linker
-ASM	:= yasm
+# assembler and linker
+ASM := yasm
 LINKER := gcc
 
-# compilation and linking flags (the -lc flag tells the linker to link against the C Standard Library)
-ASM_FLAGS := -f elf64 -g dwarf2 -l main.lst
-LINK_FLAGS := -Wall -m64	-gdwarf-2	-no-pie	-z noexecstack -lc
+# assembly flags
+ASM_FLAGS := -f elf64 -g dwarf2
+
+# production-environment link flags
+PROD_LINK_FLAGS := -m64 -g -no-pie -Wl,-z,noexecstack
+
+# dev-environment link flags (same as production)
+DEV_LINK_FLAGS := $(PROD_LINK_FLAGS)
 
 # name and path for the final executable
 BIN_NAME := main
 BIN := ./$(BIN_NAME)
 
+# source files
+ASM_SOURCES := main.asm
+OBJECTS := $(ASM_SOURCES:.asm=.o)
+
 # default operation: print the help menu
-default:	help
+default: help
 .PHONY: default
 
 # the makefile help menu
@@ -38,44 +47,46 @@ help:
 	@echo
 	@echo "--------- Makefile Menu ----------"
 	@echo
-	@echo "make help          ==> This menu"
-	@echo
-	@echo "make build         ==> Build the program"
-	@echo "make run           ==> Run the program"
-	@echo "make debug         ==> Debug the program"
-	@echo
-	@echo "make clean         ==> Clean the build area"
+	@echo "1. make help          ==> This menu"
+	@echo "2. make build         ==> Build the dev-environment program"	
+	@echo "3. make build_prod    ==> Build the production-version program"
+	@echo "4. make run           ==> Run the dev-env program"	
+	@echo "5. make debug         ==> Debug the program"
+	@echo "6. make clean         ==> Clean the build area"
 	@echo
 .PHONY: help
 
-# phony target that launches the build process
-build:	$(BIN)
+# phony target that builds the production version
+build_prod: LINK_FLAGS := $(PROD_LINK_FLAGS)
+build_prod: $(BIN)
+.PHONY: build_prod
+
+# phony target that builds the development version
+build: LINK_FLAGS := $(DEV_LINK_FLAGS)
+build: $(BIN)
 .PHONY: build
 
-# phony target that runs the exectable
-run:	$(BIN)
+# phony target that runs the executable
+run: $(BIN)
 	$(BIN)
 .PHONY: run
 
 # phony target that runs the executable in the GNU debugger
-debug:	build
+debug: build
 	gdb $(BIN_NAME) -x gdb-commands.txt
 .PHONY: debug
 
 # phony target that deletes all products of compilation
 clean:
 	-rm -f *.lst
-	-rm -f *.o
+	-rm -f $(OBJECTS)
 	-rm -f $(BIN)
 .PHONY: clean
 
 # link the object files into final executable
-$(BIN):	main.o
-	$(LINKER) $(LINK_FLAGS) *.o -o $(BIN)
+$(BIN): $(OBJECTS)
+	$(LINKER) $(LINK_FLAGS) $^ -o $@
 
-# compile the assembly code file, creating an object file
-main.o:	main.asm
-	$(ASM) $(ASM_FLAGS) main.asm -o main.o
-
-
-
+# assemble assembly code files, creating object files
+%.o: %.asm
+	$(ASM) $(ASM_FLAGS) $< -o $@
