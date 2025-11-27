@@ -14,18 +14,18 @@ echo "You passed: $OPTION"
 detect_os() {
     case "$(uname -s)" in
         Linux)
-						make -f makefile_linux $OPTION
+		    make -f makefile_linux $OPTION
             ;;
         Darwin)
             make -f makefile_mac $OPTION
             ;;
         MINGW*|MSYS*) 
-						# Git Bash on Windows
-						make -f makefile_win64 $OPTION
+			# Git Bash on Windows
+			make -f makefile_win64 $OPTION
             ;;
         CYGWIN*)	
-						# Cygwin on Windows
-						make -f makefile_win64 $OPTION
+			# Cygwin on Windows
+		    make -f makefile_win64 $OPTION
             ;;
         *)
             echo "Unknown OS"
