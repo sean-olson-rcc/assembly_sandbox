@@ -5,7 +5,7 @@
 # by: Sean Olson
 # ------------------------------------------------------------
 
-#print a blank line to create some separation
+# print a blank line to create some separation
 $(info )
 
 define output
@@ -17,25 +17,30 @@ endef
 ROOT_PATH := $(abspath .)
 $(call output, ROOT_PATH: $(ROOT_PATH))
 
-# compilers and linker
-CC	:= gcc
-LINKER := gcc
+# compiler and linker
+CC := gcc
 
-# compilation and linking flags (the -lc flag tells the linker to link against the C Standard Library)
-CC_FLAGS := -Wall -Werror -m64 -gdwarf-2 -c
+# compilation flags
+CFLAGS := -Wall -Werror -Wextra -m64 -g -std=c11
+DEPFLAGS := -MMD -MP
 
 # production-environment link flags
-PROD_LINK_FLAGS := -Wall -Werror -m64 -gdwarf-2 -z noexecstack
+PROD_LDFLAGS := -m64 -Wl,-z,noexecstack
 
 # dev-environment link flags disable position-independent execution for development
-DEV_LINK_FLAGS := $(PROD_LINK_FLAGS) -no-pie
+DEV_LDFLAGS := $(PROD_LDFLAGS) -no-pie
 
 # name and path for the final executable
 BIN_NAME := main
 BIN := ./$(BIN_NAME)
 
+# source files
+C_SOURCES := main.c
+OBJECTS := $(C_SOURCES:.c=.o)
+DEPENDS := $(OBJECTS:.o=.d)
+
 # default operation: print the help menu
-default:	help
+default: help
 .PHONY: default
 
 # the makefile help menu
@@ -52,40 +57,38 @@ help:
 	@echo
 .PHONY: help
 
-# phony target that launches the build process for the production version of the program
-build_prod:	
-	$(MAKE) $(BIN) LINK_FLAGS="$(PROD_LINK_FLAGS)"
+# phony target that builds the production version
+build_prod: LDFLAGS := $(PROD_LDFLAGS)
+build_prod: $(BIN)
 .PHONY: build_prod
 
-# phony target that launches the build process for the development version of the program
-build:
-	$(MAKE) $(BIN) LINK_FLAGS="$(DEV_LINK_FLAGS)"
+# phony target that builds the development version
+build: LDFLAGS := $(DEV_LDFLAGS)
+build: $(BIN)
 .PHONY: build
 
-# phony target that runs the exectable
-run:	$(BIN)
+# phony target that runs the executable
+run: $(BIN)
 	$(BIN)
 .PHONY: run
 
 # phony target that runs the executable in the GNU debugger
-debug:	build
+debug: build
 	gdb $(BIN_NAME) -x gdb-commands.txt
 .PHONY: debug
 
 # phony target that deletes all products of compilation
 clean:
-	-rm -f *.lst
-	-rm -f *.o
-	-rm -f $(BIN)
+	-rm -f $(OBJECTS) $(DEPENDS) $(BIN)
 .PHONY: clean
 
 # link the object files into final executable
-$(BIN):	main.o
-	$(LINKER) $(LINK_FLAGS) *.o -o $(BIN)
+$(BIN): $(OBJECTS)
+	$(CC) $(LDFLAGS) $^ -o $@
 
-# compile the assembly code file, creating an object file
-main.o:	main.c
-	$(CC) $(CC_FLAGS) $< -o $@
+# compile C source files, creating object files
+%.o: %.c
+	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
-
-
+# include dependency files
+-include $(DEPENDS)
