@@ -1,8 +1,8 @@
 # ------------------------------------------------------------
-# about: a makefile template for a pure assembly program 
+# about: a makefile template for an assembly-language program linking against the C Standard Library 
 # source: derived from makefile developed and demonstrated by Professor Michael Peralta
-# date:	11/20/2025
-# target: 
+# date:	11/27/2025
+# by: Sean Olson
 # ------------------------------------------------------------
 
 #print a blank line to create some seperation
