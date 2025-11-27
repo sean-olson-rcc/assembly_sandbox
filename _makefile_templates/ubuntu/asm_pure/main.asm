@@ -55,3 +55,5 @@ _start:
     mov rax, SYS_EXIT
     mov rdi, EXIT_SUCCESS
     syscall
+
+section .note.GNU-stack noalloc noexec nowrite progbits
