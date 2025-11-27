@@ -5,59 +5,50 @@
 ;---------------------------------------
 
 ;---------------------------------------
-; indicate that executable stack is NOT needed
-;---------------------------------------
-section .note.GNU-stack 
-	noalloc 
-	noexec 
-	nowrite 
-	progbits
-
-;---------------------------------------
 ; data section for initialized variables
 ;---------------------------------------
 
 section .data
 
-;-------------------
-; strings
+; ;-------------------
+; ; strings
 
-MSG_MULT_IMMEDIATE_PREFIX								db				"The result of multiplying immediates is: ***"
-MSG_MULT_IMMEDIATE_PREFIX_LEN						equ				$-MSG_MULT_IMMEDIATE_PREFIX
+; MSG_MULT_IMMEDIATE_PREFIX								db				"The result of multiplying immediates is: ***",0
+; ; MSG_MULT_IMMEDIATE_PREFIX_LEN						equ				$-MSG_MULT_IMMEDIATE_PREFIX
 
-MSG_MULT_IMMEDIATE_SUFFIX								db				"***"
-MSG_MULT_IMMEDIATE_SUFFIX_LEN						equ				$-MSG_MULT_IMMEDIATE_SUFFIX
+; MSG_MULT_IMMEDIATE_SUFFIX								db				"***"
+; MSG_MULT_IMMEDIATE_SUFFIX_LEN						equ				$-MSG_MULT_IMMEDIATE_SUFFIX
 
-MSG_MULT_GOLBAL_PREFIX									db				"The result of multiplying globals is: ***"
-MSG_MULT_GOLBAL_PREFIX_LEN							equ				$-MSG_MULT_GOLBAL_PREFIX
+; MSG_MULT_GOLBAL_PREFIX									db				"The result of multiplying globals is: ***"
+; MSG_MULT_GOLBAL_PREFIX_LEN							equ				$-MSG_MULT_GOLBAL_PREFIX
 
-MSG_MULT_GLOBAL_SUFFIX									db				"***"
-MSG_MULT_GLOBAL_SUFFIX_LEN							equ				$-MSG_MULT_GLOBAL_SUFFIX
+; MSG_MULT_GLOBAL_SUFFIX									db				"***"
+; MSG_MULT_GLOBAL_SUFFIX_LEN							equ				$-MSG_MULT_GLOBAL_SUFFIX
 
-CRLF																		db				13,10
-CRLF_LEN																equ				$-CRLF
+; CRLF																		db				13,10
+; CRLF_LEN																equ				$-CRLF
 
-;-------------------
-; ssystem calls
+; ;-------------------
+; ; ssystem calls
 
-SYS_WRITE																equ				1
+; SYS_WRITE																equ				1
 
 
-;-------------------
-; file descriptors
+; ;-------------------
+; ; file descriptors
 
-FD_STDOUT																equ				1
+; FD_STDOUT																equ				1
 
-;-------------------
-; return values
+; ;-------------------
+; ; return values
 
-RETURN_VALUE														equ				7
+; RETURN_VALUE														equ				7
 
-;-------------------
-; integers
+; ;-------------------
+; ; integers
 
 MY_INT_A																equ				233
-MY_INT_B																equ				256
+; MY_INT_B																equ				256
 
 ;---------------------------------------
 ; text section for instructions
@@ -67,8 +58,15 @@ section .text
 
 global math
 
+; extern print_cstring
+
 math:
 
+	; mov rdi, MSG_MULT_IMMEDIATE_PREFIX
+	; call print_cstring
 
+	mov	rax, MY_INT_A
 
 	ret
+
+	section .note.GNU-stack noalloc noexec nowrite progbits

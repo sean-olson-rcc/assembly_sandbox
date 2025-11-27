@@ -24,7 +24,7 @@ CPP_FLAGS		:=	$(CC_FLAGS) -std=c++23
 ASM_FLAGS		:=	-f elf64 -gdwarf2
 
 # Linker Flags
-LINK_FLAGS	:=	$(CPP_FLAGS) -m64 -z nonexecstack
+LINK_FLAGS	:=	$(CPP_FLAGS) -m64 -no-pie -z nonexecstack
 
 # Tack on -c (compile only, creating object files,  no linking)
 CC_FLAGS			:=	$(CC_FLAGS) -c
@@ -100,7 +100,7 @@ clean:
 
 # Build the first object file
 $(BIN): main.o	math.o 
-	$(CPP)	$(LINK_FLAGS)	*.o	 -o "$@"
+	$(CPP)	$(LINK_FLAGS)	*.o *.so	 -o "$@"
 
 
 # ------------------
