@@ -7,6 +7,7 @@
 *.out
 *.list
 *Zone.Identifier
+*.d
 
 # Platform-specific executables (no extension)
 *_l
