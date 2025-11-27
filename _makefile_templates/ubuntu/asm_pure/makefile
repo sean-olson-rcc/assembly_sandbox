@@ -2,7 +2,7 @@
 # about: a makefile template for a pure assembly program 
 # source: derived from makefile developed and demonstrated by Professor Michael Peralta
 # date:	11/20/2025
-# target: 
+# by: Sean Olson
 # ------------------------------------------------------------
 
 #print a blank line to create some seperation
