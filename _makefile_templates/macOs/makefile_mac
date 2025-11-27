@@ -1,0 +1,70 @@
+# ------------------------------------------------------------
+# about: derived from makefile developed and demonstrated by Professor Michael Peralta
+# date:	11/20/2025
+# ------------------------------------------------------------
+
+define say
+	$(info [MacOS Makefile Template] $1)
+endef
+
+#
+REPO_PATH := $(abspath .)
+$(call say,REPO_PATH: $(REPO_PATH))
+
+#
+NASM_FLAGS :=  -g -F dwarf -f macho64
+LINK_FLAGS := -g
+
+#
+BIN_NAME := main_m
+BIN := ./$(BIN_NAME)
+
+#
+default:	help
+.PHONY: default
+
+
+help:
+	@echo "***** Makefile Menu *****"
+	@echo
+	@echo "make help          ==> This menu"
+	@echo
+	@echo "make build         ==> Build the program"
+	@echo "make run           ==> Run the program"
+	@echo "make debug         ==> Debug the program"
+	@echo
+	@echo "make clean         ==> Clean the build area"
+	@echo
+.PHONY: help
+
+#
+build:	$(BIN)
+.PHONY: build
+
+#
+run:	$(BIN)
+	$(BIN)
+.PHONY: run
+
+#
+debug:	build
+	gdb $(BIN_NAME) -x gdb-commands.txt
+.PHONY: debug
+
+#
+clean:
+	-rm -f *.o
+	-rm -f *.list
+	-rm -f $(BIN)
+.PHONY: clean
+
+#
+$(BIN):	main_m.o
+	clang $(LINK_FLAGS) main_m.o -o $(BIN)
+
+#
+main_m.o:	main_m.asm
+	nasm $(NASM_FLAGS) main_m.asm -o main_m.o
+
+
+
