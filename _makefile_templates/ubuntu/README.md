@@ -3,23 +3,8 @@
 A collection of standardized makefile templates for various project types on Ubuntu x86-64 systems using YASM assembler, GCC, and G++.
 
 **Author:** Sean Olson  
-**Date:** November 27, 2025  
+**Date:** November 29, 2025  
 **Source:** Derived from makefile developed and demonstrated by Professor Michael Peralta
-
----
-
-## Table of Contents
-
-1. [Overview](#overview)
-2. [Available Templates](#available-templates)
-3. [Quick Start](#quick-start)
-4. [Template Descriptions](#template-descriptions)
-5. [Common Makefile Targets](#common-makefile-targets)
-6. [Build Configurations](#build-configurations)
-7. [Adding Source Files](#adding-source-files)
-8. [Interfacing Between Languages](#interfacing-between-languages)
-9. [Debugging](#debugging)
-10. [Additional Resources](#additional-resources)
 
 ---
 
