@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------
 ; title: manager.asm
-; description: this is a simple assembly-language program used to demonstrate a hybrid program with C and C++
+; description: this is a simple assembly-language program used to demonstrate a hybrid program with assembly, C, and C++ code modules
 ; by: sean olson
 ; date: 11/29/25
 ;------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------
 ; title: main.asm
-; description: this is a simple assembly-language that uses the C-Library function
+; description: this is a simple assembly-language program used to demonstrate a hybrid program with assembly and C++ code modules
 ; by: sean olson
 ; date: 11/27/25
 ;------------------------------------------------------------------------------

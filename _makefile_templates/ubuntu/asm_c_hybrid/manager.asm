@@ -1,6 +1,6 @@
 ;------------------------------------------------------------------------------
 ; title: main.asm
-; description: this is a simple assembly-language that uses the C-Library function
+; description: this is a simple assembly-language program used to demonstrate a hybrid program with assembly and C code modules
 ; by: sean olson
 ; date: 11/27/25
 ;------------------------------------------------------------------------------
@@ -16,7 +16,6 @@ section     .data
 ; it's a pointer, pointing to the first character in the string
 HELLO_STRING    					db     13,10,"This is the manager function in manager.asm.",13,10,"Now returning a long to the main() function.",13,10,0
 RETURN_VALUE							dq		 42	
-
 
 ;------------------------------------------------------------------------------
 ; bss section for unitialized global and static variables
