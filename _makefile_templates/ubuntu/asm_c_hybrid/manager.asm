@@ -30,7 +30,6 @@ section     .text
 
 extern printf
 
-; entry point to our program.  because it uses c-library functions, the entry point meust be called main
 global manager
 manager:
 
@@ -38,9 +37,9 @@ manager:
 		; preserve the stack and base pointers
 		push rbp
 		mov rbp, rsp
-		
+
 		;----------------------
-    ; put the stack in 16-byte alignment
+		; put the stack in 16-byte alignment
 		sub rsp, 16
 		and rsp, -16
 
@@ -59,7 +58,5 @@ manager:
 		pop rbp
 
 		ret
-
-
 
 section .note.GNU-stack noalloc noexec nowrite progbits
