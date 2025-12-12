@@ -1,0 +1,5 @@
+	b main.asm:137
+	b main.asm:147
+	b main.asm:172
+	info break
+	run

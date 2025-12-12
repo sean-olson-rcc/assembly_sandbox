@@ -1,0 +1,34 @@
+These are the GDB debug commands demonstrated in the video:
+
+
+- the `nop` instruction does nothing, but it provides a useful point to stop the program, allowing for inspection.
+
+- launch the program into the gdb debugger: `$ gdb main`
+
+- enter a break point for main on line 137: `$ b main.asm:137`
+
+- list the break points: `$ info b`
+
+- run the program after the break point(s) are entered: `$ run`
+
+- print out the contents of the registers: `$ info registers` or `$ info r`
+
+- to continue program execution when at a break point: `$ continue` or `$ c` 
+
+- to quit the debugging process: `$ quit` or `$ q`
+
+- entering a break point in the gdb config file: `b main.asm:137`
+
+- here is a simple sample of gdb-commands.txt (name is optional but must conform to name in makefile's debug target):
+
+```
+	b main.asm:137
+	b main.asm:147
+	b main.asm:172
+	info break
+	run
+```
+
+
+
+
