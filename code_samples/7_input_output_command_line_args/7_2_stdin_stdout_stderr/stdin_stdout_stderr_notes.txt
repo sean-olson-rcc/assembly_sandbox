@@ -1,0 +1,19 @@
+STDOUT
+
+- When using the `$ echo "xxxx" command and sending it a string as an argument, the echo program uses its 
+	standard out to print the string to the window.   You can redirect the outpt to another out.  For example
+	`$ echo 1>/dev/null` on Ubuntu sends the output from stdout (pipe 1) into the void.
+
+STDOUT & STDERR 
+- In a C++ std::cout and std::cerr are the two pipes available as part of the iostream library.
+
+- Piping allows the redirection of STDIN and STDERR.  In the code sample, for example, redirect pipe #1
+	to /dev/null with this: `$ ./main 1>/dev/null `.  In this case only STDERR appears on the screen.
+
+
+STDIN
+
+- To pipe input into the sample program and demonstrate the stdin, you can pipe the echo command into the run 
+	command for the program: `$ echo 'stdin message' | ./main`  
+
+
