@@ -1,0 +1,42 @@
+#b main.asm:80
+#b main.asm:91
+#b main.asm:102
+#b main.asm:112
+#b main.asm:129
+b main.asm:153
+
+run
+
+# show rotations
+#p/t $r10
+#p/t $r11
+#p/t $r12
+#p "-----"
+#p/t $r10
+#p/t $r13
+#p/t $r14
+
+
+# show shifts
+p "original (binary)"
+p/t $r10
+p "logical bitwise shift left (binary) r11:"
+p/t $r11
+p "logical bitwise shift right (binary) r12:"
+p/t $r12
+p "arithmetic bitwise shift left (in binary) r13:"
+p/t $r13
+p "arithmetic bitwise shift right (in binary) r14:"
+p/t $r14
+
+
+p "original (decimal)"
+p/d $r10
+p "logical bitwise shift left (decimal) r11:"
+p/d $r11
+p "logical bitwise shift right (decimal) r12:"
+p/d $r12
+p "arithmetic bitwise shift left (decimal) r13:"
+p/d $r13
+p "arithmetic bitwise shift right (decimal) r14:"
+p/d $r14
