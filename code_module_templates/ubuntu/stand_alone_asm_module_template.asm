@@ -65,6 +65,6 @@ global _start
 _start:
 
 
-		mov	rax,	EXIT_SUCCESS
-		mov rdi,	SYS_EXIT
+		mov	rdi,	EXIT_SUCCESS
+		mov rax,	SYS_EXIT
 		syscall
