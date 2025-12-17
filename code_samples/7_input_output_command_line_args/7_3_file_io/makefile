@@ -1,86 +1,104 @@
 # ------------------------------------------------------------
-# about: derived from makefile developed and demonstrated by Professor Michael Peralta
-# date:	11/20/2025
+# about: a makefile for a hybrid C and assembly-language program demoing file I/O in assembly
+# source: derived from makefile developed and demonstrated by Professor Michael Peralta
+# date:	12/14/2025
+# by: Sean Olson
 # ------------------------------------------------------------
 
-define say
-	$(info [file_io Sample] $1)
+# print a blank line to create some separation
+$(info )
+
+define output
+	$(info [File I/O] $1)
+	$(info )
 endef
 
+# print the root path
+ROOT_PATH := $(abspath .)
+$(call output, ROOT_PATH: $(ROOT_PATH))
 
-#
+# compilers
 CC := gcc
 ASM := yasm
-C_FLAGS := -c -Wall -gdwarf-2 -m64 -no-pie
-YASM_FLAGS := -f elf64 -g dwarf2 -Werror
-LINK_FLAGS := -Wall -gdwarf-2 -m64 -Werror -no-pie -z noexecstack
 
+# compilation flags
+CFLAGS := -Wall -Werror -Wextra -m64 -g -std=c11
+DEPFLAGS := -MMD -MP
+ASMFLAGS := -f elf64 -g dwarf2
 
-#
-REPO_PATH := $(abspath .)
-$(call say,REPO_PATH: $(REPO_PATH))
+# production-environment link flags
+PROD_LDFLAGS := -m64 -Wl,-z,noexecstack
 
+# dev-environment link flags disable position-independent execution for development
+DEV_LDFLAGS := $(PROD_LDFLAGS) -no-pie
 
-#
+# name and path for the final executable
 BIN_NAME := main
 BIN := ./$(BIN_NAME)
-$(call say,Binary path: $(BIN))
 
+# source files
+C_SOURCES := main.c
+ASM_SOURCES := file_io.asm
+C_OBJECTS := $(C_SOURCES:.c=.o)
+ASM_OBJECTS := $(ASM_SOURCES:.asm=.o)
+OBJECTS := $(C_OBJECTS) $(ASM_OBJECTS)
+DEPENDS := $(C_OBJECTS:.o=.d)
 
-#
-default:	help
+# default operation: print the help menu
+default: help
 .PHONY: default
 
-
-#
+# the makefile help menu
 help:
-	@echo "***** Integer-Division Sample *****"
 	@echo
-	@echo "make help         ==> This help menu"
+	@echo "--------- Makefile Menu ----------"
 	@echo
-	@echo "make build        ==> Rebuild your project"
-	@echo "make run          ==> Run your project"
-	@echo "make debug        ==> Debug your project"
-	@echo
-	@echo "make clean        ==> Clean temporary build files"
+	@echo "1. make help          ==> This menu"
+	@echo "2. make build         ==> Build the dev-environment program"	
+	@echo "3. make build_prod    ==> Build the production-version program"
+	@echo "4. make run           ==> Run the dev-env program"	
+	@echo "5. make debug         ==> Debug the program"
+	@echo "6. make clean         ==> Clean the build area"
 	@echo
 .PHONY: help
 
+# phony target that builds the production version
+build_prod: LDFLAGS := $(PROD_LDFLAGS)
+build_prod: $(BIN)
+.PHONY: build_prod
 
-#
-build:	$(BIN)
+# phony target that builds the development version
+build: LDFLAGS := $(DEV_LDFLAGS)
+build: $(BIN)
 .PHONY: build
 
-
-#
-run:	build
+# phony target that runs the executable
+run: LDFLAGS := $(DEV_LDFLAGS)
+run: $(BIN)
 	$(BIN)
 .PHONY: run
 
-#
-debug:	build
+# phony target that runs the executable in the GNU debugger
+debug: build
 	gdb $(BIN_NAME) -x gdb-commands.txt
 .PHONY: debug
 
-
-#
+# phony target that deletes all products of compilation
 clean:
-	-rm *.o
-	-rm $(BIN)
+	-rm -f $(OBJECTS) $(DEPENDS) $(BIN) output.txt
 .PHONY: clean
 
+# link the object files into final executable
+$(BIN): $(OBJECTS)
+	$(CC) $(LDFLAGS) $^ -o $@
 
-#
-$(BIN):	main.o file_io.o
-	$(CC) $(LINK_FLAGS) *.o *.so -o $(BIN)
+# compile C source files, creating object files
+%.o: %.c
+	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
+# assemble assembly source files, creating object files
+%.o: %.asm
+	$(ASM) $(ASMFLAGS) $< -o $@
 
-#
-main.o:	main.c
-	$(CC) $(C_FLAGS) $< -o "$@"
-
-
-#
-file_io.o:	file_io.asm
-	$(ASM) $(YASM_FLAGS) $< -o "$@"
-
+# include dependency files
+-include $(DEPENDS)

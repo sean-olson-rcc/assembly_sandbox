@@ -10,18 +10,18 @@ section					.data
 
 ; ---------------------------
 ; c-strings
-MSG_INTRO													db			"The File IO demo module has started", 0
+MSG_INTRO													db			"The File IO demo module has started",13,10,0
 
-MSG_FILE_OPEN_SUCCESS							db 			"Successfully opened read file: ", 0
-MSG_FILE_OPEN_FAIL								db 			"Failed to open file: ", 0
+MSG_FILE_OPEN_SUCCESS							db 			"Successfully opened read file: ",0
+MSG_FILE_OPEN_FAIL								db 			"Failed to open file: ",13,10,0
 
-MSG_FILE_CREATE_SUCCESS						db 			"Successfully created file: ", 0
-MSG_FILE_CREATE_FAIL							db 			"Failed to create file: ", 0
+MSG_FILE_CREATE_SUCCESS						db 			"Successfully created file: ",0
+MSG_FILE_CREATE_FAIL							db 			"Failed to create file: ",13,10,0
 
-MSG_FILE_COPY_DONE								db 			"Done copying files", 0
+MSG_FILE_COPY_DONE								db 			"Done copying files",13,10,0
 
-MSG_DIE_FILE_OPEN									db			"Terminating program after failure to open file", 0
-MSG_DIE_FILE_CREATE								db			"Terminating program after failure to create file", 0
+MSG_DIE_FILE_OPEN									db			"Terminating program after failure to open file",13,10,0
+MSG_DIE_FILE_CREATE								db			"Terminating program after failure to create file",13,10,0
 
 CRLF															db			13, 10, 0
 CRLF_LEN													equ			$ -CRLF
@@ -71,50 +71,84 @@ EXIT_FAIL												equ			1
 ; ----------------------------------------------------------
 section					.bss
 
-
-
 ; ----------------------------------------------------------
 ;  text section
 ; ----------------------------------------------------------
 section .text
 
+extern printf
+
+
 global file_io
-extern	libPuhfessorP_printRegisters
 
+;--------------------------------------
+;	void file_io()
+;		register usage:
+;			rbp: stack frame base pointer preserved
+;			rsp: stack pointer used to adjust 16-byte stack alignment
+;
 file_io:
+	;--------------------------------------
+	; prologue
+	;-------------------
+	push rbp
+	mov rbp, rsp
 
-	call welcome
+	;-------------------
+	; set 16-byte stack alignment
+	sub rsp, 16
+	and rsp, -16
+
+	;--------------------------------------
+	; instructions
+	;-------------------
+	;print the welcome
+	mov	rdi,	MSG_INTRO
+	call printf
 	call file_tests
 
+	mov rax, 0
+
+	;--------------------------------------
+	; epilogue
+	;-------------------
+
+	mov rsp, rbp	
+	pop rbp
+
 	ret
 
-
-; ---------------------------
-; void welcome()
-;
-; register usage:
-;		none
-welcome:
-	mov	rdi,	MSG_INTRO
-	mov	rsi,	FD_STDOUT
-	call print_null_terminated_string
-	call print_newline
-	ret
 
 ; ---------------------------
 ; void file_tests()
 ;
-; register usage:
-;		r12: input file handle
-;		r13: output file handle
-;		r14: count of bytes read from the input file
+; 	register usage:
+;			rbp: stack frame base pointer preserved
+;			rsp: stack pointer used to adjust 16-byte stack alignment
+;			r12: input file handle
+;			r13: output file handle
+;			r14: count of bytes read from the input file
 file_tests:
 
-	; ------------
+	;--------------------------------------
 	; prologue
+	;-------------------
+	push rbp
+	mov rbp, rsp
+
 	push	r12	
 	push	r13	
 	push	r14
+
+	;-------------------
+	; set 16-byte stack alignment
+	sub rsp, 16
+	and rsp, -16
+
+	;--------------------------------------
+	; instructions
+	;-------------------
+
 
 	; ------------
 	; open the file to read
@@ -130,6 +164,8 @@ file_tests:
 	call create_file
 	mov	r13,	rax
 
+	nop
+
 	; ------------
 	; copy the input file to the output file
 	mov	rdi,	r12
@@ -139,7 +175,7 @@ file_tests:
 	; ------------
 	; print success message
 	mov	rdi,	MSG_FILE_COPY_DONE
-	mov	rsi,	FD_STDOUT
+	mov rsi, FD_STDOUT
 	call print_null_terminated_string
 	call print_newline
 
@@ -150,31 +186,40 @@ file_tests:
 	mov	rdi, r13
 	call	close_file
 
-	; ------------
+	;------------------------
 	; epilogue
+	;------------
 	pop r14
 	pop r13
 	pop r12
+
+	mov rsp, rbp	
+	pop rbp
 
 	ret
 
 ; ---------------------------
 ; long_FILE_HANDLE open_file_read(char * file_name, long flags)
 ;
-; register usage:
-;		r12: file name char*
-;		r13: file flags
-;		r14: file handle
+; 	register usage:
+;			rbp: stack frame base pointer preserved
+;			rsp: stack pointer used to adjust 16-byte stack alignment
+;			r12: file name char*
+;			r13: file flags
+;			r14: file handle
 open_file_read:
 
-	; ------------
+	;-------------------
 	; prologue
+	push rbp
+	mov rbp, rsp
+
 	push	r12	
 	push	r13	
 	push	r14
 
 	; ------------
-	; grab incoming arguments
+	; grab incoming arguments: file name and flags
 	mov	r12,	rdi	
 	mov	r13,	rsi
 
@@ -236,24 +281,40 @@ open_file_read:
 	pop r13
 	pop r12
 
+	mov rsp, rbp	
+	pop rbp
+
 	ret
 
 ; ---------------------------
 ; long_FILE_HANDLE create_file(char * file_name, long perms)
 ;
-; register usage:
-;		r12: file name char*
-;		r13: file flags
-;		r14: file handle	
+; 	register usage:
+;			rbp: stack frame base pointer preserved
+;			rsp: stack pointer used to adjust 16-byte stack alignment
+;			r12: file name char*
+;			r13: file flags
+;			r14: file handle	
 create_file:
 
-	; ------------
+	;--------------------------------------
 	; prologue
+	;--------------
+	push rbp
+	mov rbp, rsp
+
 	push	r12	
 	push	r13	
 	push	r14
 
-	; ------------
+	;-------------------
+	; set 16-byte stack alignment
+	sub rsp, 16
+	and rsp, -16
+
+	;--------------------------------------
+	; instructions
+	;-------------------
 	; grab incoming arguments
 	mov	r12,	rdi	
 	mov	r13,	rsi
@@ -268,6 +329,8 @@ create_file:
 	; ------------
 	; save the file handle
 	mov	r14, rax
+
+	nop
 
 	; ------------
 	; verify that the file was created
@@ -313,11 +376,15 @@ create_file:
 		; return file handle
 		mov	rax, 	r14	
 
-	; ------------
+	;------------------------
 	; epilogue
+	;------------
 	pop r14
 	pop r13
 	pop r12
+
+	mov rsp, rbp	
+	pop rbp	
 
 	ret	
 
@@ -331,85 +398,95 @@ create_file:
 ;		r15: temp bytes read
 copy_file:
 
-	; ------------
+	;--------------------------------------
 	; prologue
+	;-------------------
+	push	rbp
+	mov rbp, rsp
+	
 	push	r12	
 	push	r13	
 	push	r14
 	push	r15
-	push	rbp
 
-	; ------------
+	;-------------------
+	; set 16-byte stack alignment
+	; sub rsp, 16
+	; and rsp, -16
+
+	;--------------------------------------
+	; instructions
+	;-------------------
 	; grab incoming arguments
 	mov	r12,	rdi	
 	mov	r13,	rsi
 
 	; ------------
 	; make a buffer of the stack	
-	mov	rbp, rsp
 	sub	rsp,	COPY_BUFFER_LEN
 	mov	r14,	rsp
 
-	; ------------
-	; copy file iteration routine
-	copy_file_iterate:
-		mov	rax, SYS_READ
-		mov	rdi, r12
-		mov	rsi, r14
-		mov	rdx, COPY_BUFFER_LEN
-		syscall
-		mov	r15, rax
-
-		
-	; ------------
-	; verify that data was read
-	cmp	r15, 0
-	je	copy_file_done
-
-	; ------------
-	; write to the output file
-	mov	rax, SYS_WRITE
-	mov	rdi, r13
-	mov	rsi, r14
-	mov	rdx, r15
-	syscall
-
-	; ------------
-	; continue to read
-	jmp	copy_file_iterate
-
-	; ------------
-	; copy file done routine
-	copy_file_done:
-
 		; ------------
-		; print the fail message
-		mov	rdi,	MSG_FILE_COPY_DONE
-		mov	rsi, 	FD_STDOUT
-		call print_null_terminated_string
+		; copy file iteration routine
+		copy_file_iterate:
+			mov	rax, SYS_READ
+			mov	rdi, r12
+			mov	rsi, r14
+			mov	rdx, COPY_BUFFER_LEN
+			syscall
+			mov	r15, rax
 
-		call print_newline
+			nop
 
-		; mov	rdi,	r12
-		; mov	rsi, 	FD_STDOUT
-		; call print_null_terminated_string
+	; 		; ------------
+	; 		; verify that data was read
+	; 		cmp	r15, 0
+	; 		je	copy_file_done
 
-		; mov	rdi,	r13
-		; mov	rsi, 	FD_STDOUT
-		; call print_null_terminated_string
+			; ------------
+			; write to the output file
+			mov	rax, SYS_WRITE
+			mov	rdi, r13
+			mov	rsi, r14
+			mov	rdx, r15
+			syscall
+
+			nop
+
+	; 	; ------------
+	; 	; continue to read
+	; 	jmp	copy_file_iterate
+
+	; ; ------------
+	; ; copy file done routine
+	; copy_file_done:
+
+	; ; ------------
+	; ; print the fail message
+	; mov	rdi,	MSG_FILE_COPY_DONE
+	; mov	rsi, 	FD_STDOUT
+
+	; mov	rdi,	r12
+	; mov	rsi, 	FD_STDOUT
+	; call print_null_terminated_string
+
+	; mov	rdi,	r13
+	; mov	rsi, 	FD_STDOUT
+	; call print_null_terminated_string
 				
-		; call print_newline	
-
-		call libPuhfessorP_printRegisters
-
-
-	; ------------
+	; call print_newline	
+	
+	;------------------------
 	; epilogue
-	pop rbp
+	;------------
+	
 	pop r15
 	pop r14
 	pop r13
 	pop r12
+
+	mov rsp, rbp
+	pop rbp
 
 	ret	
 
@@ -528,9 +605,13 @@ die:
 	call print_null_terminated_string
 	call print_newline
 
-
 	; ------------
 	; exit the program
 	mov	rax,	SYS_EXIT
 	mov	rdi,	EXIT_FAIL
 	syscall		
+
+;------------------------------------------------------------------------------
+; note.GNU-stack section closes security holes
+;------------------------------------------------------------------------------
+section .note.GNU-stack noalloc noexec nowrite progbits		

@@ -1,0 +1,8 @@
+b file_io.asm:167
+b file_io.asm:237
+b file_io.asm:243
+b file_io.asm:333
+b file_io.asm:439
+
+
+run
